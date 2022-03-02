@@ -1,0 +1,74 @@
+[
+  {
+    "model": "task.settings",
+    "pk": 1,
+    "fields": {
+      "name": "DATASET_PATH",
+      "value": "dataset",
+      "description": "Example: dataset"
+    }
+  },
+  {
+    "model": "task.settings",
+    "pk": 2,
+    "fields": {
+      "name": "DATASET_JSON_NAME",
+      "value": "IkeaAssemblyInstructionDataset.json",
+      "description": "IkeaAssemblyInstructionDataset.json"
+    }
+  },
+  {
+    "model": "task.settings",
+    "pk": 3,
+    "fields": {
+      "name": "VIDAT_URL",
+      "value": "https://vidat2.davidz.cn",
+      "description": "Example: https://vidat2.davidz.cn"
+    }
+  },
+  {
+    "model": "task.settings",
+    "pk": 4,
+    "fields": {
+      "name": "VIDAT_SUMIT_URL",
+      "value": "https://mturk.davidz.cn/task/submit",
+      "description": "Example: https://mturk.davidz.cn/task/submit"
+    }
+  },
+  {
+    "model": "task.settings",
+    "pk": 5,
+    "fields": {
+      "name": "VIDAT_AUDIT_URL",
+      "value": "https://mturk.davidz.cn/task/audit",
+      "description": "Example: https://mturk.davidz.cn/task/audit"
+    }
+  },
+  {
+    "model": "task.settings",
+    "pk": 6,
+    "fields": {
+      "name": "VIDAT_VERSION",
+      "value": "2.0.0-alpha",
+      "description": "Example: 2.0.0"
+    }
+  },
+  {
+    "model": "task.settings",
+    "pk": 7,
+    "fields": {
+      "name": "VIDAT_DEFAULT_FPS",
+      "value": "10",
+      "description": "Example: 10"
+    }
+  },
+  {
+    "model": "task.settings",
+    "pk": 8,
+    "fields": {
+      "name": "VIDAT_DEFAULT_FPK",
+      "value": "50",
+      "description": "Example: 50"
+    }
+  }
+]

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MTurkManagement</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body>
+<div class="w-full h-[100vh] flex flex-col justify-center items-center">
+    <button onclick="handleLoadFromMongoDB()"
+            class="block m-4 px-4 py-2 text-sm bg-white text-slate-700 border border-slate-300 rounded-md ring-2 ring-blue-500/50 hover:ring-blue-500">
+        Load from MongoDB
+    </button>
+    <button onclick="handleLoadFromJSON()"
+            class="block m-4 px-4 py-2 text-sm bg-white text-slate-700 border border-slate-300 rounded-md ring-2 ring-blue-500/50 hover:ring-blue-500">
+        Load from JSON
+    </button>
+    <div id="hint"></div>
+</div>
+<script>
+    const hintElement = document.querySelector('#hint')
+    const loadTask = (name) => fetch(`/task/${name}/`).then(res => res.text())
+    const handleLoadFromMongoDB = () => {
+        loadTask('load_task_from_mongodb').then(data => {
+            hintElement.innerText = data
+        }).catch(err => {
+            alert(JSON.stringify(err))
+            console.log(err)
+        })
+    }
+    const handleLoadFromJSON = () => {
+        loadTask('load_task_from_json').then(data => {
+            hintElement.innerText = data
+        }).catch(err => {
+            alert(JSON.stringify(err))
+            console.log(err)
+        })
+    }
+</script>
+</body>
+</html>
