@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import re
 import uuid
 
 from django.http import HttpResponse, JsonResponse
@@ -8,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from item.models import Item
 from task.models import Task, Settings, Submission, Audit
+
+reg = re.compile(r"(\d+)")
 
 
 def get_random_color():
@@ -41,7 +44,7 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH)
     annotation_path = os.path.join(item_path, 'annotation')
     os.makedirs(annotation_path, exist_ok=True)
     action_annotation_list = []
-    for index, step_file in enumerate(os.listdir(step_path)):
+    for index, step_file in enumerate(sorted(os.listdir(step_path), key=lambda name: int(reg.findall(name)[0]))):
         random_color = get_random_color()
         config["actionLabelData"].append({
             "id": index + 1,
