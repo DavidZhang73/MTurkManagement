@@ -22,7 +22,7 @@ jobs:
           POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
         run: |
           docker login --username=${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
-          docker build . -t ${{ secrets.REGISTRY }}:$SHA
+          docker build --build-arg MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}  --build-arg POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }} . -t ${{ secrets.REGISTRY }}:$SHA
           docker push ${{ secrets.REGISTRY }}:$SHA
           docker tag $(docker images ${{ secrets.REGISTRY }}:$SHA -q) ${{ secrets.REGISTRY }}:latest
           docker push ${{ secrets.REGISTRY }}:latest
