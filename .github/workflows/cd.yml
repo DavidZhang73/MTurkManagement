@@ -18,6 +18,8 @@ jobs:
       - name: Push Docker image
         env:
           SHA: ${{ steps.short-sha.outputs.sha }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
         run: |
           docker login --username=${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
           docker build . -t ${{ secrets.REGISTRY }}:$SHA
