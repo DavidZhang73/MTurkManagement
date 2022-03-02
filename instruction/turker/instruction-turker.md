@@ -1,6 +1,6 @@
 ---
 # Pandoc
-title: MTurk Instruction - Admin
+title: MTurk Instruction - Turker
 author: Jiahao Zhang
 date: Mar. 1, 2022
 documentclass: article
