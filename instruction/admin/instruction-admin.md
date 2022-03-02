@@ -35,7 +35,7 @@ subfigGrid: true
 autoSectionLabels: true
 ---
 
-> Issues related to MTurk Management, please [email](mailto:u6921098@anu.edu.au) me directly.
+> Issues related to MTurk Management, please create issue [here](https://github.com/DavidZhang73/MTurkManagement/issues).
 >
 > Issues related to Vidat, please create issue [here](https://github.com/anucvml/vidat/issues).
 
