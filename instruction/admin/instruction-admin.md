@@ -2,7 +2,7 @@
 # Pandoc
 title: MTurk Instruction - Admin
 author: Jiahao Zhang
-date: Mar. 1, 2022
+date: Mar. 5, 2022
 documentclass: article
 papersize: a4
 geometry: margin=2.5cm
@@ -39,7 +39,7 @@ autoSectionLabels: true
 >
 > Issues related to Vidat, please create issue [here](https://github.com/anucvml/vidat/issues).
 
-# Log In MTurk Management
+# Log in MTurk Management
 
 [MTurk Management](https://mturk.davidz.cn)
 
@@ -49,21 +49,29 @@ autoSectionLabels: true
 
 ![Login.](img/step0-1.png)
 
+# Load Tasks into a New Batch
+
+![Click button `New Batch from JSON`. Every click loads all tasks from the source into a batch for convenient bulk delete operation..](img/step0-2.png)
+
+> `New Batch from JSON`: Make sure `DATASET_PATH` and `DATASET_JSON_NAME` are defined correctly in the `task/settings`.
+>
+> `New Batch from MongoDB`: Deprecated.
+
 # Get Task CSV
 
-![Go to Task tab.](img/step0-2.png)
+![Go to Task tab.](img/step0-3.png)
 
-![Export tasks. If no task is selected, all tasks are exported by default.](img/step0-3.png)
+![Filter by batch and then export tasks. If no task is selected, all tasks are exported by default.](img/step0-4.png)
 
-![Choose `csv` and Submit.](img/step0-4.png)
+![Choose `csv` (default) and Submit. Save the csv file to your local computer.](img/step0-5.png)
 
 # Sign In MTurk Requester Sandbox
 
 [MTurk Requester Sandbox](https://requestersandbox.mturk.com/signin_options)
 
-# Start A New Project
+# Start a New Project
 
-We will use the `Survey Link` template. Just follow the instruction.
+> We will use the `Survey Link` template. Just follow the instruction.
 
 ![Start a new project.](img/start-a-project.png)
 
@@ -101,14 +109,24 @@ We will use the `Survey Link` template. Just follow the instruction.
 
 ![Submit back to MTurk Management if there are modifications, if not just close Vidat.](img/step6-3.png)
 
-![Open audit detail by clicking the id.](img/step6-4.png)
-
-![Change the Result status accordingly and save.](img/step6-5.png)
+![Find the newly updated audit by search/filter on the top, then select the audit and use button `Mark as xxx` to change the Result status accordingly.](img/step6-4.png)
 
 # Progress Status
 
-![Go to task tab, the progress status can be monitored by Audit Result (#PASS / #SUBMISSION).](img/step7.png)
+> `AUDIT PASS FAIL UNSET COUNT `number of pass/file/unset audit results
+>
+> `SUBMISSION COUNT` number of submissions
+>
+> `PROGRESS` number of non-UNSET audit results / number of submissions
 
-All task progress status [WIP]
+![Go to batch/task tab, the progress status can be monitored by `AUDIT PASS FAIL UNSET COUNT`, `SUBMISSION COUNT` and `PROGRESS`.](img/step7.png)
+
+# Delete a Batch
+
+![The ER model](img/database.svg)
+
+> All the foreignkeys are set to [CASCADED](https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey.on_delete) on delete, therefore, whenever you delete a batch, all the related tasks are also removed, so is the submissions and the audits.
+
+![When deleting a batch, all related objects will show up on the warning page](img/step8.png)
 
 > Thanks for your cooperation, cheers!
