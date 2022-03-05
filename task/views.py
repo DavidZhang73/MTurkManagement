@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from item.models import Item
-from task.models import Task, Settings, Submission, Audit
+from task.models import Task, Settings, Submission, Audit, Batch
 
 reg = re.compile(r"(\d+)")
 
@@ -17,7 +17,7 @@ def get_random_color():
     return f'#{str(hex(000000 + int(random.random() * 16777216)))[-6:]}'
 
 
-def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH):
+def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH, batch_id):
     config = {
         "objectLabelData": [
             {
@@ -66,7 +66,13 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH)
         })
     video_id = video_url.replace("https://www.youtube.com/watch?v=", "")
     video_name = f'{video_id}.mp4'
+    if Task.objects.count():
+        task_id = Task.objects.latest('id').id + 1
+    else:
+        task_id = 1
     Task(
+        id=task_id,
+        batch_id=batch_id,
         annotation={
             "version": Settings.objects.get(name='VIDAT_VERSION').value,
             "annotation": {
@@ -83,31 +89,36 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH)
             "config": config
         },
         annotation_pathname="/" + "/".join(
-            [DATASET_PATH, item_category, item_subCategory, item_id, 'annotation', f'task-{item_id}-{video_id}.json'])
+            [DATASET_PATH, item_category, item_subCategory, item_id, 'annotation',
+             f'task-{task_id}-{item_id}-{video_id}.json'])
     ).save()
 
 
 @csrf_exempt
-def load_task_from_mongodb(request):
+def new_batch_from_mongodb(request):
     DATASET_PATH = Settings.objects.get(name='DATASET_PATH').value
+    batch = Batch()
+    batch.save()
     count = 0
     for item in Item.objects.filter(progressStatus__in=[[True, True, True]]):
         for video in item.videoList:
-            save_task(item.category, item.subCategory, item.id, video.url, DATASET_PATH)
+            save_task(item.category, item.subCategory, item.id, video.url, DATASET_PATH, batch.pk)
             count += 1
     return HttpResponse(f'{count} tasks added!')
 
 
 @csrf_exempt
-def load_task_from_json(request):
+def new_batch_from_json(request):
     DATASET_PATH = Settings.objects.get(name='DATASET_PATH').value
     DATASET_JSON_NAME = Settings.objects.get(name='DATASET_JSON_NAME').value
+    batch = Batch()
+    batch.save()
     count = 0
     with open(os.path.join(DATASET_PATH, DATASET_JSON_NAME), 'r', encoding='utf8') as f:
         dataset = json.load(f)
     for item in dataset:
         for video in item['videoList']:
-            save_task(item['category'], item['subCategory'], item['id'], video['url'], DATASET_PATH)
+            save_task(item['category'], item['subCategory'], item['id'], video['url'], DATASET_PATH, batch.pk)
             count += 1
     return HttpResponse(f'{count} tasks added!')
 

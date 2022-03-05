@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Australia/Sydney'
 
 USE_I18N = True
 
@@ -160,26 +160,31 @@ SIMPLEUI_CONFIG = {
         {
             'app': 'task',
             'name': 'MTurk',
-            'icon': 'fa fa-pencil-ruler',
+            'icon': 'fas fa-pencil-ruler',
             'models': [
                 {
+                    'name': 'Batch',
+                    'icon': 'fas fa-clipboard-list',
+                    'url': 'task/batch/'
+                },
+                {
                     'name': 'Task',
-                    'icon': 'fa fa-tasks',
+                    'icon': 'fas fa-tasks',
                     'url': 'task/task/'
                 },
                 {
                     'name': 'Submission',
-                    'icon': 'fa fa-file-upload',
+                    'icon': 'fas fa-file-upload',
                     'url': 'task/submission/'
                 },
                 {
                     'name': 'Audit',
-                    'icon': 'fa fa-clipboard-check',
+                    'icon': 'fas fa-clipboard-check',
                     'url': 'task/audit/'
                 },
                 {
                     'name': 'Settings',
-                    'icon': 'fa fa-cog',
+                    'icon': 'fas fa-cog',
                     'url': 'task/settings/'
                 }
             ]

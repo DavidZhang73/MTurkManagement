@@ -46,7 +46,53 @@ class AnnotationModel(models.Model):
         abstract = True
 
 
+class Batch(models.Model):
+    description = models.TextField(blank=True, null=True)
+    created_datetime = models.DateTimeField(auto_now_add=True)
+
+    def task_count(self):
+        return self.task_set.count()
+
+    def submission_count(self):
+        count = 0
+        for task in self.task_set.all():
+            count += task.submission_set.count()
+        return count
+
+    def audit_pass_fail_unset_count(self):
+        pass_count = 0
+        fail_count = 0
+        unset_count = 0
+        for task in self.task_set.all():
+            for submission in task.submission_set.all():
+                if submission.audit.result == 'PASS':
+                    pass_count += 1
+                elif submission.audit.result == 'FAIL':
+                    fail_count += 1
+                elif submission.audit.result == 'UNSET':
+                    unset_count += 1
+        return f'{pass_count} / {fail_count} / {unset_count}'
+
+    def progress(self):
+        audit_count = 0
+        submission_count = 0
+        for task in self.task_set.all():
+            for submission in task.submission_set.all():
+                submission_count += 1
+                if submission.audit.result != 'UNSET':
+                    audit_count += 1
+        if submission_count:
+            return f'{round(audit_count / submission_count, 2)}%'
+        else:
+            return '-'
+
+    def __str__(self):
+        return f'Batch {self.pk}'
+
+
 class Task(AnnotationModel):
+    batch = models.ForeignKey(to=Batch, on_delete=models.CASCADE, null=True)
+
     def url(self):
         VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
         VIDAT_SUMIT_URL = Settings.objects.get(name='VIDAT_SUMIT_URL').value
@@ -67,17 +113,18 @@ class Task(AnnotationModel):
         )
 
     @admin.display
-    def audit_result(self):
-        submission_set = self.submission_set.all()
-        submission_count = len(submission_set)
-        if submission_count:
-            audit_pass_count = 0
-            for submission in submission_set:
-                if submission.audit.result == 'PASS':
-                    audit_pass_count += 1
-            return f'{audit_pass_count} / {submission_count}'
-        else:
-            return '0 / 0'
+    def audit_pass_fail_unset_count(self):
+        pass_count = 0
+        fail_count = 0
+        unset_count = 0
+        for submission in self.submission_set.all():
+            if submission.audit.result == 'PASS':
+                pass_count += 1
+            elif submission.audit.result == 'FAIL':
+                fail_count += 1
+            elif submission.audit.result == 'UNSET':
+                unset_count += 1
+        return f'{pass_count} / {fail_count} / {unset_count}'
 
     def __str__(self):
         return f'Task {self.pk}'
