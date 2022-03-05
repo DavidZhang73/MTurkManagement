@@ -40,7 +40,7 @@ class AnnotationModel(models.Model):
         return self.annotation['config']['actionLabelData']
 
     def step_list_count(self):
-        return len(self.annotation['config']['actionLabelData'])
+        return len(self.annotation['config']['actionLabelData']) - 1  # remove default
 
     class Meta:
         abstract = True
