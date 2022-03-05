@@ -43,6 +43,8 @@ class TaskAdmin(ExportMixin, admin.ModelAdmin):
         'id',
         'vidat',
         'audit_pass_fail_unset_count',
+        'submission_count',
+        'progress',
         'step_list_count',
         'batch',
         'annotation_pathname'

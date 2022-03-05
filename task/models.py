@@ -105,6 +105,21 @@ class Task(AnnotationModel):
                f'&defaultFps={VIDAT_DEFAULT_FPS}&defaultFpk={VIDAT_DEFAULT_FPK}' \
                f'&submitURL={urllib.parse.quote_plus(VIDAT_SUMIT_URL + "/" + str(self.id) + "/")}'
 
+    def submission_count(self):
+        return self.submission_set.count()
+
+    def progress(self):
+        audit_count = 0
+        submission_count = 0
+        for submission in self.submission_set.all():
+            submission_count += 1
+            if submission.audit.result != 'UNSET':
+                audit_count += 1
+        if submission_count:
+            return f'{round(audit_count / submission_count, 2)}%'
+        else:
+            return '-'
+
     @admin.display
     def vidat(self):
         return format_html(
