@@ -25,6 +25,9 @@
     const handleLoadFromMongoDB = () => {
         loadTask('new_batch_from_mongodb').then(data => {
             hintElement.innerText = data
+            setTimeout(() => {
+                hintElement.innerText = ''
+            }, 5000)
         }).catch(err => {
             alert(JSON.stringify(err))
             console.log(err)
@@ -33,6 +36,9 @@
     const handleLoadFromJSON = () => {
         loadTask('new_batch_from_json').then(data => {
             hintElement.innerText = data
+            setTimeout(() => {
+                hintElement.innerText = ''
+            }, 5000)
         }).catch(err => {
             alert(JSON.stringify(err))
             console.log(err)

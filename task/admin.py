@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.db import models
+from django_monaco_editor.widgets import AdminMonacoEditorWidget
 from import_export import resources
 from import_export.admin import ExportMixin
 from import_export.fields import Field
 from import_export.formats.base_formats import CSV
 
-from django_monaco_editor.widgets import AdminMonacoEditorWidget
 from .models import Batch, Task, Submission, Settings, Audit
 
 
@@ -98,9 +98,22 @@ class AuditAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.JSONField: {'widget': AdminMonacoEditorWidget}
     }
+    actions = ['mark_pass', 'mark_fail', 'mark_unset']
 
     def has_add_permission(self, request):
         return False
+
+    @admin.action(description='Mark as PASS')
+    def mark_pass(self, request, queryset):
+        queryset.update(result='PASS')
+
+    @admin.action(description='Mark as FAIL')
+    def mark_fail(self, request, queryset):
+        queryset.update(result='FAIL')
+
+    @admin.action(description='Mark as UNSET')
+    def mark_unset(self, request, queryset):
+        queryset.update(result='UNSET')
 
 
 @admin.register(Settings)
