@@ -3,6 +3,11 @@ pandoc instruction-turker.md `
 --standalone `
 --listings `
 --number-sections `
---filter pandoc-crossref `
 --template eisvogel `
 --pdf-engine lualatex
+
+pandoc instruction-turker.md `
+-o instruction-turker.html `
+--standalone
+
+python ./post-process.py

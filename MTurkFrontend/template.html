@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
+          integrity="sha384-IS73LIqjtYesmURkDE9MXKbXqYA8rvKEp/ghicjem7Vc3mGRdQRptJSz60tvrB6+" rel="stylesheet"/>
+    <style type="text/css">
+        #collapseTrigger {
+            color: #fff;
+            display: block;
+            text-decoration: none;
+        }
+
+        #submitButton {
+            white-space: normal;
+        }
+
+        .dont-break-out {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            word-break: break-all;
+            word-break: break-word;
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+        }
+
+        input.form-control {
+            margin-bottom: 10px;
+        }
+
+        p.warning {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f2c037;
+        }
+
+        img, iframe {
+            max-width: 100%;
+        }
+
+        figure {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<!-- For help on using this template, see the blog post: https://blog.mturk.com/editing-the-survey-link-project-template-in-the-ui-7c75285105fb#.py7towsdx -->
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<section class="container" id="SurveyLink">
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <div class="panel panel-primary">
+                <a class="panel-heading" href="javascript:void(0);" id="collapseTrigger">
+                    <strong>Video Annotation Instructions</strong>
+                    <span class="collapse-text">(Click to expand)</span>
+                </a>
+                <div class="panel-body" id="instructionBody">
+                    <p class="warning"><strong>Make sure to leave this window open as you complete the
+                        annotation. </strong> When you are
+                        finished, you will return to this page to paste the submission code into the box.</p>
+                    INSTRUCTION_TEMPLATE
+                    <h2>Tutorial Video</h1>
+                    <iframe width="896" height="512" src="https://www.youtube.com/embed/XsxGac7Z4Wk"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="workContent">
+        <div class="col-xs-12 col-md-6 col-md-offset-3">
+            <table class="table table-condensed table-bordered">
+                <colgroup>
+                    <col class="col-xs-4 col-md-4"/>
+                    <col class="col-xs-8 col-md-8"/>
+                </colgroup>
+                <tbody>
+                <tr>
+                    <td>Vidat link:</td>
+                    <td>
+                        <a class="dont-break-out" href="${url}" target="_blank">
+                            ${url}
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <label for="submissionCode">Provide the submission code here:</label>
+                <input class="form-control" id="submissionCode" name="submissionCode"
+                       placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000" required
+                       type="text"/>
+                <label for="feedback">Provide general feedback (optional):</label>
+                <input class="form-control" id="feedback" name="feedback"
+                       placeholder="e.g. Vidat is awesome!" required
+                       type="text"/>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"
+        integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"
+        integrity="sha384-s1ITto93iSMDxlp/79qhWHi+LsIi9Gx6yL+cOKDuymvihkfol83TYbLbOw+W/wv4"
+        crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        var content = $('#instructionBody');
+        var trigger = $('#collapseTrigger');
+        content.hide();
+        $('.collapse-text').text('(Click to expand)');
+        trigger.click(function () {
+            content.toggle();
+            var isVisible = content.is(':visible');
+            if (isVisible) {
+                $('.collapse-text').text('(Click to collapse)');
+            } else {
+                $('.collapse-text').text('(Click to expand)');
+            }
+        });
+    });
+</script>
+</body>
+</html>

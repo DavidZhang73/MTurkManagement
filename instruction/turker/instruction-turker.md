@@ -41,7 +41,7 @@ autoSectionLabels: true
 
 [MTurk Worker Sandbox](https://workersandbox.mturk.com/)
 
-You may be required to fill a registration form if you are the first time to use MTurk.
+> You may be required to fill a registration form if you are the first time to use MTurk.
 
 ![Worker registration](img/worker-registration.png)
 
@@ -55,7 +55,7 @@ You may be required to fill a registration form if you are the first time to use
 
 # Annotation In Vidat
 
-## Vidat
+## Vidat Introducation
 
 ![**Header** a video caching status and a dark mode toggle.](img/step2-1.png)
 
