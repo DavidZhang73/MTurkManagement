@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from item.models import Item
-from task.models import Task, Settings, Submission, Audit, Batch
+from task.models import Task, Settings, Batch, Assignment
 
 reg = re.compile(r"(\d+)")
 
@@ -94,24 +94,24 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH,
     ).save()
 
 
-@csrf_exempt
-def new_batch_from_mongodb(request):
+def _new_batch_from_mongodb(description=None):
     DATASET_PATH = Settings.objects.get(name='DATASET_PATH').value
     batch = Batch()
+    batch.description = description
     batch.save()
     count = 0
     for item in Item.objects.filter(progressStatus__in=[[True, True, True]]):
         for video in item.videoList:
             save_task(item.category, item.subCategory, item.id, video.url, DATASET_PATH, batch.pk)
             count += 1
-    return HttpResponse(f'{count} tasks added!')
+    return count
 
 
-@csrf_exempt
-def new_batch_from_json(request):
+def _new_batch_from_json(description=None):
     DATASET_PATH = Settings.objects.get(name='DATASET_PATH').value
     DATASET_JSON_NAME = Settings.objects.get(name='DATASET_JSON_NAME').value
     batch = Batch()
+    batch.description = description
     batch.save()
     count = 0
     with open(os.path.join(DATASET_PATH, DATASET_JSON_NAME), 'r', encoding='utf8') as f:
@@ -120,47 +120,87 @@ def new_batch_from_json(request):
         for video in item['videoList']:
             save_task(item['category'], item['subCategory'], item['id'], video['url'], DATASET_PATH, batch.pk)
             count += 1
+    return count
+
+
+@csrf_exempt
+def new_batch_from_mongodb(request):
+    count = _new_batch_from_mongodb()
     return HttpResponse(f'{count} tasks added!')
 
 
 @csrf_exempt
+def new_batch_from_json(request):
+    count = _new_batch_from_json()
+    return HttpResponse(f'{count} tasks added!')
+
+
+def is_same(obj1, obj2):
+    return json.dumps(obj1) == json.dumps(obj2)
+
+
+@csrf_exempt
 def submit(request, task_id):
-    task = Task.objects.get(id=task_id)
-    _id = uuid.uuid4()
-    annotation = json.loads(request.body)
-    annotation_path = '/'.join([task.annotation_pathname.split('/annotation')[0], 'annotation'])
-    submission = Submission(
-        uuid=_id,
-        task=task,
-        annotation=annotation,
-        annotation_pathname='/'.join([annotation_path, f'submission-{_id}.json'])
-    )
-    submission.save()
-    if Audit.objects.count():
-        _audit_id = Audit.objects.latest('id').id + 1
-    else:
-        _audit_id = 1
-    _audit = Audit(
-        id=_audit_id,
-        submission=submission,
-        annotation=annotation
-    )
-    _audit.annotation_pathname = '/'.join([annotation_path, f'audit-{_audit_id}.json'])
-    _audit.save()
-    return JsonResponse({
-        "message": "Thanks for your work! Please copy and paste the uuid back to MTurk.",
-        "clipboard": _id
-    })
+    try:
+        task = Task.objects.get(id=task_id)
+        _uuid = uuid.uuid4()
+        task_annotation = task.annotation
+        annotation = json.loads(request.body)
+        # sanity check
+        ## check annotation
+        if is_same(task_annotation["annotation"]["actionAnnotationList"],
+                   annotation["annotation"]["actionAnnotationList"]):
+            return JsonResponse({
+                "type": 'negative',
+                "message": "There is no annotation detected!"
+            })
+        ## check video
+        if task_annotation["annotation"]["video"]["src"] != annotation["annotation"]["video"]["src"]:
+            return JsonResponse({
+                "type": 'negative',
+                "message": "The video should not be changed!"
+            })
+        ## check config
+        if not is_same(task_annotation["config"], annotation["config"]):
+            return JsonResponse({
+                "type": 'negative',
+                "message": "The config should not be changed!"
+            })
+        ## check action list length
+        for action in task_annotation["annotation"]["actionAnnotationList"]:
+            if action["start"] >= action["end"]:
+                return JsonResponse({
+                    "type": 'negative',
+                    "message": "The duration of an action should be greater than 0! "
+                               "Please delete all actions that did not appear in the video!"
+                })
+        annotation_path = '/'.join([task.annotation_pathname.split('/annotation')[0], 'annotation'])
+        assignment = Assignment(
+            uuid=_uuid,
+            task=task,
+            status=Assignment.STATUS.CREATED,
+            annotation=annotation,
+            annotation_pathname='/'.join([annotation_path, f'submission-{_uuid}.json']),
+            final_annotation=annotation,
+            final_annotation_pathname='/'.join([annotation_path, f'final-{_uuid}.json'])
+        )
+        assignment.save()
+        return JsonResponse({
+            "message": "Thanks for your work! Please copy and paste the uuid back to MTurk.",
+            "clipboard": _uuid
+        })
+    except Exception as e:
+        return JsonResponse({
+            "message": str(e)
+        })
 
 
 @csrf_exempt
 def audit(request, submission_uuid):
-    submission = Submission.objects.get(uuid=submission_uuid)
-    _audit = submission.audit
-    _audit.annotation = json.loads(request.body)
-    _audit.result = 'UNSET'
-    _audit.save()
+    assignment = Assignment.objects.get(uuid=submission_uuid)
+    assignment.final_annotation = json.loads(request.body)
+    assignment.save()
     return JsonResponse({
         "message": "Thanks for your work!",
-        "clipboard": _audit.id
+        "clipboard": assignment.uuid
     })

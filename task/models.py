@@ -1,9 +1,7 @@
 import urllib.parse
 import uuid
 
-from django.contrib import admin
 from django.db import models
-from django.utils.html import format_html
 
 
 class AnnotationModel(models.Model):
@@ -50,41 +48,7 @@ class Batch(models.Model):
     description = models.TextField(blank=True, null=True)
     created_datetime = models.DateTimeField(auto_now_add=True)
 
-    def task_count(self):
-        return self.task_set.count()
-
-    def submission_count(self):
-        count = 0
-        for task in self.task_set.all():
-            count += task.submission_set.count()
-        return count
-
-    def audit_pass_fail_unset_count(self):
-        pass_count = 0
-        fail_count = 0
-        unset_count = 0
-        for task in self.task_set.all():
-            for submission in task.submission_set.all():
-                if submission.audit.result == 'PASS':
-                    pass_count += 1
-                elif submission.audit.result == 'FAIL':
-                    fail_count += 1
-                elif submission.audit.result == 'UNSET':
-                    unset_count += 1
-        return f'{pass_count} / {fail_count} / {unset_count}'
-
-    def progress(self):
-        audit_count = 0
-        submission_count = 0
-        for task in self.task_set.all():
-            for submission in task.submission_set.all():
-                submission_count += 1
-                if submission.audit.result != 'UNSET':
-                    audit_count += 1
-        if submission_count:
-            return f'{round(audit_count / submission_count, 2)}%'
-        else:
-            return '-'
+    mturk_batch_id = models.CharField(max_length=32, null=True, editable=False)
 
     def __str__(self):
         return f'Batch {self.pk}'
@@ -92,6 +56,11 @@ class Batch(models.Model):
 
 class Task(AnnotationModel):
     batch = models.ForeignKey(to=Batch, on_delete=models.CASCADE, null=True)
+
+    mturk_hit_id = models.CharField(max_length=128, null=True, editable=False)
+    mturk_hit_status = models.CharField(max_length=32, null=True, editable=False)
+    mturk_hit_title = models.CharField(max_length=128, null=True, editable=False)
+    mturk_hit_expiration = models.DateTimeField(null=True, editable=False)
 
     def url(self):
         VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
@@ -105,106 +74,45 @@ class Task(AnnotationModel):
                f'&defaultFps={VIDAT_DEFAULT_FPS}&defaultFpk={VIDAT_DEFAULT_FPK}' \
                f'&submitURL={urllib.parse.quote_plus(VIDAT_SUMIT_URL + "/" + str(self.id) + "/")}'
 
-    def submission_count(self):
-        return self.submission_set.count()
-
-    def progress(self):
-        audit_count = 0
-        submission_count = 0
-        for submission in self.submission_set.all():
-            submission_count += 1
-            if submission.audit.result != 'UNSET':
-                audit_count += 1
-        if submission_count:
-            return f'{round(audit_count / submission_count, 2)}%'
-        else:
-            return '-'
-
-    @admin.display
-    def vidat(self):
-        return format_html(
-            '<a href="{}" target="_blank">Open in Vidat</a>',
-            self.url(),
-        )
-
-    @admin.display
-    def audit_pass_fail_unset_count(self):
-        pass_count = 0
-        fail_count = 0
-        unset_count = 0
-        for submission in self.submission_set.all():
-            if submission.audit.result == 'PASS':
-                pass_count += 1
-            elif submission.audit.result == 'FAIL':
-                fail_count += 1
-            elif submission.audit.result == 'UNSET':
-                unset_count += 1
-        return f'{pass_count} / {fail_count} / {unset_count}'
-
     def __str__(self):
         return f'Task {self.pk}'
 
 
-class Submission(AnnotationModel):
+class Assignment(AnnotationModel):
+    class STATUS(models.TextChoices):
+        CREATED = ('CREATE', 'Created')
+        SUBMITTED = ('SUBMIT', 'Submitted')
+        APPROVED = ('APPROVE', 'Approved')
+        REJECTED = ('REJECT', 'Rejected')
+        UNKNOWN = ('UNKNOWN', 'Unknown')
+
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     task = models.ForeignKey(to=Task, on_delete=models.CASCADE)
+    status = models.CharField(max_length=7, choices=STATUS.choices, default=STATUS.UNKNOWN)
+    final_annotation = models.JSONField()
+    final_annotation_pathname = models.CharField(max_length=1024, blank=True, null=True)
+    last_modified_datetime = models.DateTimeField(auto_now=True)
 
-    def url(self):
+    mturk_assignment_id = models.CharField(max_length=128, null=True, editable=False)
+    mturk_assignment_status = models.CharField(max_length=32, null=True, editable=False)
+    mturk_worker_id = models.CharField(max_length=128, null=True, editable=False)
+    mturk_worker_feedback = models.TextField(null=True, editable=False)
+    mturk_worker_accept_time = models.DateTimeField(null=True, editable=False)
+    mturk_worker_submit_time = models.DateTimeField(null=True, editable=False)
+
+    def url(self, annotation_pathname):
         VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
         VIDAT_AUDIT_URL = Settings.objects.get(name='VIDAT_AUDIT_URL').value
         VIDAT_DEFAULT_FPS = Settings.objects.get(name='VIDAT_DEFAULT_FPS').value
         VIDAT_DEFAULT_FPK = Settings.objects.get(name='VIDAT_DEFAULT_FPK').value
-        return f'{VIDAT_URL}' \
-               f'?annotation={self.annotation_pathname}' \
+        return f'{VIDAT_URL}?annotation={annotation_pathname}' \
                f'&showObjects=false&showRegions=false&showSkeletons=false&showActions=true' \
                f'&showPopup=false&grayscale=false&decoder=auto&muted=false&zoom=false' \
                f'&defaultFps={VIDAT_DEFAULT_FPS}&defaultFpk={VIDAT_DEFAULT_FPK}' \
                f'&submitURL={urllib.parse.quote_plus(VIDAT_AUDIT_URL + "/" + str(self.uuid) + "/")}'
 
-    @admin.display
-    def vidat(self):
-        return format_html(
-            '<a href="{}" target="_blank">Audit in Vidat</a>',
-            self.url(),
-        )
-
-    @admin.display
-    def audit_result(self):
-        return self.audit.result
-
     def __str__(self):
-        return f'Submission {self.uuid}'
-
-
-class Audit(AnnotationModel):
-    AUDIT_RESULT = (
-        ('PASS', 'PASS'),
-        ('FAIL', 'FAIL'),
-        ('UNSET', 'UNSET')
-    )
-    submission = models.OneToOneField(to=Submission, on_delete=models.CASCADE)
-    result = models.CharField(max_length=5, choices=AUDIT_RESULT, default='UNSET')
-
-    def url(self):
-        VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
-        VIDAT_AUDIT_URL = Settings.objects.get(name='VIDAT_AUDIT_URL').value
-        VIDAT_DEFAULT_FPS = Settings.objects.get(name='VIDAT_DEFAULT_FPS').value
-        VIDAT_DEFAULT_FPK = Settings.objects.get(name='VIDAT_DEFAULT_FPK').value
-        return f'{VIDAT_URL}?annotation={self.annotation_pathname}' \
-               f'&showObjects=false&showRegions=false&showSkeletons=false&showActions=true' \
-               f'&showPopup=false&grayscale=false&decoder=auto&muted=false&zoom=false' \
-               f'&defaultFps={VIDAT_DEFAULT_FPS}&defaultFpk={VIDAT_DEFAULT_FPK}' \
-               f'&submitURL={urllib.parse.quote_plus(VIDAT_AUDIT_URL + "/" + str(self.submission.uuid) + "/")}'
-
-    @admin.display
-    def vidat(self):
-        return format_html(
-            '<a href="{}" target="_blank">Audit in Vidat</a>',
-            self.url(),
-        )
-
-    def __str__(self):
-        return f'Audit {self.pk}'
+        return f'Assignment {self.uuid}'
 
 
 class Settings(models.Model):

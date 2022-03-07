@@ -20,11 +20,11 @@ require(['vs/editor/editor.main'], function () {
         value: JSON.stringify(JSON.parse(content.value), null, 2),
     });
 
-    // 监听提交表单操作，传值给实际的textarea
-    let form = content.form;
-    form.addEventListener('submit', function () {
-        content.value = editor.getValue();
-    });
-
+        // 监听提交表单操作，传值给实际的textarea
+        let form = content.form;
+        form.addEventListener('submit', function () {
+            content.value = editor.getValue();
+        });
+    }
 });
 

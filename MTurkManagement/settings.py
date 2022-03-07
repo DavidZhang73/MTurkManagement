@@ -150,7 +150,6 @@ CORS_ALLOWED_ORIGINS = [
 
 # Simple UI
 # https://simpleui.72wo.com/docs/simpleui/quick.html
-SIMPLEUI_HOME_PAGE = '/home/'
 SIMPLEUI_HOME_TITLE = 'Home'
 SIMPLEUI_HOME_ICON = 'fas fa-home'
 SIMPLEUI_ANALYSIS = False
@@ -173,14 +172,9 @@ SIMPLEUI_CONFIG = {
                     'url': 'task/task/'
                 },
                 {
-                    'name': 'Submission',
+                    'name': 'Assignment',
                     'icon': 'fas fa-file-upload',
-                    'url': 'task/submission/'
-                },
-                {
-                    'name': 'Audit',
-                    'icon': 'fas fa-clipboard-check',
-                    'url': 'task/audit/'
+                    'url': 'task/assignment/'
                 },
                 {
                     'name': 'Settings',

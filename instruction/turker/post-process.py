@@ -18,11 +18,11 @@ with open(INPUT_PATHNAME, 'r', encoding='utf8') as f:
     content = f.read()
 content = reg.findall(content)[0]
 
-# base64 encode img src
+# use raw.githubusercontent.com for img src
 for img_src in img_src_reg.findall(content):
-    with open(img_src, 'rb') as f:
-        img = base64.b64encode(f.read()).decode('ascii')
-        content = content.replace(img_src, f'data:image/png;base64,{img}')
+    content = content.replace(
+        img_src, f'https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/{img_src}'
+    )
 
 # insert back to template
 with open(os.path.join(OUTPUT_PATH, 'template.html'), 'r', encoding='utf8') as f:

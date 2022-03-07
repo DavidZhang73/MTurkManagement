@@ -188,8 +188,8 @@
         </el-form>
 
         <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="layerSubmit()" v-text="layer.confirm_button||'确定'"></el-button>
-            <el-button @click="visible = false" v-text="layer.cancel_button||'取消'"></el-button>
+            <el-button type="primary" @click="layerSubmit()" v-text="layer.confirm_button||'Confirm'"></el-button>
+            <el-button @click="visible = false" v-text="layer.cancel_button||'Cancel'"></el-button>
         </span>
     </el-dialog>
 </div>
@@ -416,9 +416,9 @@
                     type: 'warning'
                 })
             } else if (confirm) {
-                _vue.$confirm(confirm, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                _vue.$confirm(confirm, 'Tip', {
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Cancle',
                     type: 'warning'
                 }).then(() => done.call(this));
 

@@ -55,7 +55,7 @@ autoSectionLabels: true
 
 # Annotation In Vidat
 
-## Vidat Introducation
+## Vidat Introduction
 
 ![**Header** a video caching status and a dark mode toggle.](img/step2-1.png)
 
