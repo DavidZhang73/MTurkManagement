@@ -162,7 +162,7 @@
 
 </nav>
 <blockquote>
-<p>Issues related to Vidat, please create issue <a
+<p>Issues related to Vidat, please create issues <a
 href="https://github.com/anucvml/vidat/issues">here</a>.</p>
 </blockquote>
 <h1 id="sign-in-or-create-an-account">Sign In or Create an Account</h1>
@@ -196,20 +196,40 @@ instruction.</figcaption>
 <h2 id="vidat-introduction">Vidat Introduction</h2>
 <figure>
 <img src="img/step2-1.png"
-alt="Header a video caching status and a dark mode toggle." />
+alt="Header a video caching status and a dark mode toggle. Once all frames are cached, you can change the frame smoothly." />
 <figcaption aria-hidden="true"><strong>Header</strong> a video caching
-status and a dark mode toggle.</figcaption>
+status and a dark mode toggle. Once all frames are cached, you can
+change the frame smoothly.</figcaption>
 </figure>
+<blockquote>
+<p>some useful hot keys for video control:</p>
+<ul>
+<li><code>P</code> play / pause video segment</li>
+</ul>
+</blockquote>
 <figure>
 <img src="img/step2-2.png"
-alt="Keyframe Panel on the left, you can play the video segment specified by the range or edit keyframe list. In the middle, you can change the frame of left/right panel by dragging the left/right thumb or the entire range, the purple below indicates the frames annotated by actions. One the right, you can quick locate the keyframe(s)." />
+alt="Keyframe Panel on the left, you can play the video segment specified by the range or edit keyframe list. In the middle, you can change the frame of left/right panel by dragging the left/right thumb or the range, the purple below indicates the frames annotated by actions. One the right, you can quick locate the keyframe(s)." />
 <figcaption aria-hidden="true"><strong>Keyframe Panel</strong> on the
 left, you can play the video segment specified by the range or edit
 keyframe list. In the middle, you can change the frame of left/right
-panel by dragging the left/right thumb or the entire range, the purple
-below indicates the frames annotated by actions. One the right, you can
-quick locate the keyframe(s).</figcaption>
+panel by dragging the left/right thumb or the range, the purple below
+indicates the frames annotated by actions. One the right, you can quick
+locate the keyframe(s).</figcaption>
 </figure>
+<blockquote>
+<p>Some useful hot keys for frames control:</p>
+<ul>
+<li><code>COMMA, &lt;</code>, <code>PERIOD, &gt;</code> advance to
+previous / next keyframe</li>
+<li><code>LEFT-ARROW</code>, <code>RIGHT-ARROW</code> previous / next
+frame</li>
+<li><code>UP-ARROW</code>, <code>DOWN-ARROW</code> cycle through the
+frame slider: right &gt; range &gt; left</li>
+<li><code>PAGE-UP</code>, <code>PAGE-DOWN</code>, jump to previous /
+next 10% of video</li>
+</ul>
+</blockquote>
 <figure>
 <img src="img/step2-3.png"
 alt="Left/Right Canvas Panel and Control Panel (in the middle) there is an action indicator on the left-bottom corner to show actions which cover current frame." />
@@ -224,12 +244,34 @@ alt="Action / Video Segment Table you can modify the action annotaion List." />
 <figcaption aria-hidden="true"><strong>Action / Video Segment
 Table</strong> you can modify the action annotaion List.</figcaption>
 </figure>
+<blockquote>
+<ul>
+<li><code>ADD</code> or press <code>PLUS (+)</code> key on your keyboard
+to add a new action</li>
+<li><code>CLEAR</code> bulk delete all actions</li>
+<li><code>start</code> start time in seconds</li>
+<li><code>end</code> end time in seconds</li>
+<li><code>duration</code> duration (end time - start time) in
+seconds</li>
+<li><code>action</code> the action label, in this task, it refers to
+steps</li>
+<li><code>object</code> the corresponding object label, please leave it
+as default in this task</li>
+<li><code>description</code></li>
+<li><img src="img/gps_fixed_black_24dp.svg" alt="locate" /> set
+start/end time as current left/right frame</li>
+<li><img src="img/edit_location_alt_black_24dp.svg" alt="edit" /> set
+current left/right frame as start/end time</li>
+<li><img src="img/delete_black_24dp.svg" alt="delete" /> delete this
+action</li>
+</ul>
+</blockquote>
 <h2 id="steps">Steps</h2>
 <figure>
 <img src="img/step3-1.png"
-alt="Click the thumbnail to view each step." />
-<figcaption aria-hidden="true">Click the thumbnail to view each
-step.</figcaption>
+alt="Click the thumbnail to view each step. Click it again to close the popup." />
+<figcaption aria-hidden="true">Click the thumbnail to view each step.
+Click it again to close the popup.</figcaption>
 </figure>
 <figure>
 <img src="img/step3-2.png"
@@ -246,9 +288,9 @@ segment.</figcaption>
 </figure>
 <figure>
 <img src="img/step3-4.png"
-alt="Once the duration is longer than 0, the warning color will disappear." />
+alt="Once the duration is longer than 0, the warning (yellow) color will disappear." />
 <figcaption aria-hidden="true">Once the duration is longer than 0, the
-warning color will disappear.</figcaption>
+warning (yellow) color will disappear.</figcaption>
 </figure>
 <figure>
 <img src="img/step3-5.png"
@@ -262,6 +304,14 @@ alt="Open the side menu after finishing annotation, and click submit button" />
 <figcaption aria-hidden="true">Open the side menu after finishing
 annotation, and click submit button</figcaption>
 </figure>
+<blockquote>
+<p>Please check the followings before submitting</p>
+<ul>
+<li>the video is not changed</li>
+<li>the configuration is not changed</li>
+<li>duration of each action is greater than 0</li>
+</ul>
+</blockquote>
 <figure>
 <img src="img/step3-7.png"
 alt="Your submission id will be notified and copied to your clipboard." />

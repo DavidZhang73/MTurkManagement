@@ -35,7 +35,7 @@ subfigGrid: true
 autoSectionLabels: true
 ---
 
-> Issues related to Vidat, please create issue [here](https://github.com/anucvml/vidat/issues).
+> Issues related to Vidat, please create issues [here](https://github.com/anucvml/vidat/issues).
 
 # Sign In or Create an Account
 
@@ -57,27 +57,56 @@ autoSectionLabels: true
 
 ## Vidat Introduction
 
-![**Header** a video caching status and a dark mode toggle.](img/step2-1.png)
+![**Header** a video caching status and a dark mode toggle. Once all frames are cached, you can change the frame smoothly.](img/step2-1.png)
 
-![**Keyframe Panel** on the left, you can play the video segment specified by the range or edit keyframe list. In the middle, you can change the frame of left/right panel by dragging the left/right thumb or the entire range, the purple below indicates the frames annotated by actions. One the right, you can quick locate the keyframe(s).](img/step2-2.png)
+> some useful hot keys for video control:
+>
+> - `P` play / pause video segment
+
+![**Keyframe Panel** on the left, you can play the video segment specified by the range or edit keyframe list. In the middle, you can change the frame of left/right panel by dragging the left/right thumb or the range, the purple below indicates the frames annotated by actions. One the right, you can quick locate the keyframe(s).](img/step2-2.png)
+
+> Some useful hot keys for frames control:
+>
+> - `COMMA, <`, `PERIOD, >` advance to previous / next keyframe
+> - `LEFT-ARROW`, `RIGHT-ARROW` previous / next frame
+> - `UP-ARROW`, `DOWN-ARROW` cycle through the frame slider: right > range > left
+> - `PAGE-UP`, `PAGE-DOWN`, jump to previous / next 10% of video
 
 ![**Left/Right Canvas Panel and Control Panel (in the middle)** there is an action indicator on the left-bottom corner to show actions which cover current frame.](img/step2-3.png)
 
 ![**Action / Video Segment Table** you can modify the action annotaion List.](img/step2-4.png)
 
+> - `ADD` or press `PLUS (+)` key on your keyboard to add a new action
+> - `CLEAR` bulk delete all actions
+> - `start` start time in seconds
+> - `end` end time in seconds
+> - `duration` duration (end time - start time) in seconds
+> - `action` the action label, in this task, it refers to steps
+> - `object` the corresponding object label, please leave it as default in this task
+> - `description`
+> - ![locate](img/gps_fixed_black_24dp.svg) set start/end time as current left/right frame
+> - ![edit](img/edit_location_alt_black_24dp.svg) set current left/right frame as start/end time
+> - ![delete](img/delete_black_24dp.svg) delete this action
+
 ## Steps
 
-![Click the thumbnail to view each step.](img/step3-1.png)
+![Click the thumbnail to view each step. Click it again to close the popup.](img/step3-1.png)
 
 ![Locate left and right panel to align start and end frame.](img/step3-2.png)
 
 ![Click the second button on the corresponding row to set start and end time for this segment.](img/step3-3.png)
 
-![Once the duration is longer than 0, the warning color will disappear.](img/step3-4.png)
+![Once the duration is longer than 0, the warning (yellow) color will disappear.](img/step3-4.png)
 
 ![Delete the segment if it is not shown in the video.](img/step3-5.png)
 
 ![Open the side menu after finishing annotation, and click submit button](img/step3-6.png)
+
+> Please check the followings before submitting
+>
+> - the video is not changed
+> - the configuration is not changed
+> - duration of each action is greater than 0
 
 ![Your submission id will be notified and copied to your clipboard.](img/step3-7.png)
 
