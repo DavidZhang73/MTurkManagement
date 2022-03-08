@@ -136,7 +136,7 @@ def new_batch_from_json(request):
 
 
 def is_same(obj1, obj2):
-    return json.dumps(obj1) == json.dumps(obj2)
+    return json.dumps(obj1, sort_keys=True) == json.dumps(obj2, sort_keys=True)
 
 
 @csrf_exempt
@@ -167,7 +167,7 @@ def submit(request, task_id):
                 "message": "The config should not be changed!"
             })
         ## check action list length
-        for action in task_annotation["annotation"]["actionAnnotationList"]:
+        for action in annotation["annotation"]["actionAnnotationList"]:
             if action["start"] >= action["end"]:
                 return JsonResponse({
                     "type": 'negative',
