@@ -35,9 +35,9 @@ subfigGrid: true
 autoSectionLabels: true
 ---
 
-> Issues related to MTurk Management, please create issue [here](https://github.com/DavidZhang73/MTurkManagement/issues).
+> Issues related to MTurk Management, please create issues [here](https://github.com/DavidZhang73/MTurkManagement/issues).
 >
-> Issues related to Vidat, please create issue [here](https://github.com/anucvml/vidat/issues).
+> Issues related to Vidat, please create issues [here](https://github.com/anucvml/vidat/issues).
 
 # Log in MTurk Management
 
@@ -51,19 +51,21 @@ autoSectionLabels: true
 
 # Load Tasks into a New Batch
 
-![Click button `New Batch from JSON`. Every click loads all tasks from the source into a batch for convenient bulk delete operation..](img/step0-2.png)
+![Go to the Batch tab.](img/step0-2.png)
 
-> `New Batch from JSON`: Make sure `DATASET_PATH` and `DATASET_JSON_NAME` are defined correctly in the `task/settings`.
->
-> `New Batch from MongoDB`: Deprecated.
+![Click button `New Batch from JSON` and enter a description for this batch. Every click loads all tasks from the source into a new batch for convenient bulk delete operation.](img/step0-3.png)
+
+> - `New Batch from JSON`: Make sure `DATASET_PATH` and `DATASET_JSON_NAME` are defined correctly in the `task/settings`.
+> - `New Batch from MongoDB`: Deprecated.
+> - `REVIEW` review the result in MTurk. This is available only after you have uploaded the batch to MTurk and have synced with MTurk in the Task tab. Make sure `MTURK_BATCH_REVIEW` is defined correctly in the `task/settings`.
 
 # Get Task CSV
 
-![Go to Task tab.](img/step0-3.png)
+![Go to Task tab.](img/step0-4.png)
 
-![Filter by batch and then export tasks. If no task is selected, all tasks are exported by default.](img/step0-4.png)
+![Filter by batch and then export tasks. If no task is selected, all tasks are exported by default.](img/step0-5.png)
 
-![Choose `csv` (default) and Submit. Save the csv file to your local computer.](img/step0-5.png)
+![Choose `csv` (default) and Submit. Save the csv file to your local computer.](img/step0-6.png)
 
 # Sign In MTurk Requester Sandbox
 
@@ -99,33 +101,53 @@ autoSectionLabels: true
 
 ![Confirm and publish batch.](img/step5-5.png)
 
+# Sync With MTurk
+
+> This step is needed whenever a new batch is uploaded to MTurk.
+
+![Go to Task tab.](img/step6-1.png)
+
+![Click the button `Sync With MTurk`. This will help obtain the corresponding `HITIDd`, `HITStatus`, `HITExpretion` and `BatchId`.](img/step6-2.png)
+
 # Audit Submissions
 
-> Each Submission corresponds to one audit entity. Audit is auto-generated when the submission is created by copying submission's annotation.
+![Go to Assignment tab.](img/step7-1.png)
 
-![Go to Audit tab.](img/step6-1.png)
-
-![Audit submission with `UNSET` result status.](img/step6-2.png)
-
-![Submit back to MTurk Management if there are modifications, if not just close Vidat.](img/step6-3.png)
-
-![Find the newly updated audit by search/filter on the top, then select the audit and use button `Mark as xxx` to change the Result status accordingly.](img/step6-4.png)
-
-# Progress Status
-
-> `AUDIT PASS FAIL UNSET COUNT `number of pass/file/unset audit results
+> STATUS:
 >
-> `SUBMISSION COUNT` number of submissions
->
-> `PROGRESS` number of non-UNSET audit results / number of submissions
+> - `Created` annotation is submitted via Vidat
+> - `Submitted` submission code is submitted via MTurk
+> - `Approved` the assignment is approved
+> - `Rejected` the assignment is rejected
+> - `Unknown` unknown situation
 
-![Go to batch/task tab, the progress status can be monitored by `AUDIT PASS FAIL UNSET COUNT`, `SUBMISSION COUNT` and `PROGRESS`.](img/step7.png)
+![Click button `Sync With MTurk` to obtain assignment related data. It could be slow, please wait with patient.](img/step6-2.png)
+
+> `Sync With MTurk` will iterate over all assignments with given HITIds in the Task tab. If the submission code (assignment id) and the HITId (task id) matches, the assignment will be marked as `Submitted`, or, it will be rejected automatically.
+>
+> E.g.
+>
+> - submission code is not in UUID format: rejected automatically
+> - submission code is not for this task: rejected automatically
+> - submission code could not be found: rejected automatically
+
+![Audit Assignments with `Submitted` status. A status filter can be helpful.](img/step6-3.png)
+
+> Some attributes could be helpful for audit
+>
+> - `#STEP` number of steps in this task, `#ANNOTATED STEP` number of annotated steps in this assignment, if `#ANNOTATED STEP` is significant less than `#STEP`, there could be some issues.
+> - `Work Time` the time it takes the worker from accepting the HIT to submitting the HIT. If it is too short, then the quality of the annotation could be low.
+> - `MTURK WORKER FEEDBACK` feedback from the worker.
+
+![Submit back to MTurk Management if there need to be some modifications, if not just close Vidat.](img/step6-4.png)
+
+![Approve or reject the assignment as you like. Please note that you approve, and reject is irreversible action and approve would lead to actual payment. There is a feedback needed when rejecting the assignment and it can be seen by the worker. This could be slow, please wait will patient.](img/step6-5.png)
 
 # Delete a Batch
 
 ![The ER model](img/database.svg)
 
-> All the foreignkeys are set to [CASCADED](https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey.on_delete) on delete, therefore, whenever you delete a batch, all the related tasks are also removed, so is the submissions and the audits.
+> All the foreignkeys are set to [CASCADED](https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey.on_delete) on delete, therefore, whenever you delete a batch, all the related tasks are also removed, so is the assignment.
 
 ![When deleting a batch, all related objects will show up on the warning page](img/step8.png)
 
