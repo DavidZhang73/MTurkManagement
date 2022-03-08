@@ -1,6 +1,5 @@
 import os
 import re
-import base64
 
 INPUT_PATHNAME = "instruction-turker.html"
 OUTPUT_PATH = os.path.join(

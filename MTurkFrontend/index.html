@@ -1,258 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
-          integrity="sha384-IS73LIqjtYesmURkDE9MXKbXqYA8rvKEp/ghicjem7Vc3mGRdQRptJSz60tvrB6+" rel="stylesheet"/>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+      crossorigin="anonymous"
+    />
     <style type="text/css">
-        #collapseTrigger {
-            color: #fff;
-            display: block;
-            text-decoration: none;
-        }
+      #collapseTrigger {
+        color: #fff;
+        display: block;
+        text-decoration: none;
+      }
 
-        #submitButton {
-            white-space: normal;
-        }
+      #submitButton {
+        white-space: normal;
+      }
 
-        .dont-break-out {
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-            -ms-word-break: break-all;
-            word-break: break-all;
-            word-break: break-word;
-            -ms-hyphens: auto;
-            -moz-hyphens: auto;
-            -webkit-hyphens: auto;
-            hyphens: auto;
-        }
+      .dont-break-out {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        -ms-word-break: break-all;
+        word-break: break-all;
+        word-break: break-word;
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+      }
 
-        input.form-control {
-            margin-bottom: 10px;
-        }
+      input.form-control {
+        margin-bottom: 10px;
+      }
 
-        p.warning {
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #f2c037;
-        }
+      p.warning {
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f2c037;
+      }
 
-        img, iframe {
-            max-width: 100%;
-        }
+      img,
+      iframe {
+        max-width: 100%;
+      }
 
-        figure {
-            margin: 10px 0;
-        }
+      figure {
+        margin: 10px 0;
+      }
+
+      #help {
+        color: #c42b1c;
+      }
     </style>
-</head>
-<body>
-<!-- For help on using this template, see the blog post: https://blog.mturk.com/editing-the-survey-link-project-template-in-the-ui-7c75285105fb#.py7towsdx -->
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<section class="container" id="SurveyLink">
-    <div class="row">
+  </head>
+  <body>
+    <!-- For help on using this template, see the blog post: https://blog.mturk.com/editing-the-survey-link-project-template-in-the-ui-7c75285105fb#.py7towsdx -->
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <section class="container" id="SurveyLink">
+      <div class="row">
         <div class="col-xs-12 col-md-12">
-            <div class="panel panel-primary">
-                <a class="panel-heading" href="javascript:void(0);" id="collapseTrigger">
-                    <strong>Video Annotation Instructions</strong>
-                    <span class="collapse-text">(Click to expand)</span>
-                </a>
-                <div class="panel-body" id="instructionBody">
-                    <p class="warning"><strong>Make sure to leave this window open as you complete the
-                        annotation. </strong> When you are
-                        finished, you will return to this page to paste the submission code into the box.</p>
-                    
-<h2 id="vidat-introduction">Vidat Introduction</h2>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step2-1.png"
-alt="Header a video caching status and a dark mode toggle. Once all frames are cached, you can change the frame smoothly." />
-<figcaption aria-hidden="true"><strong>Header</strong> a video caching
-status and a dark mode toggle. Once all frames are cached, you can
-change the frame smoothly.</figcaption>
-</figure>
-<blockquote>
-<p>some useful hot keys for video control:</p>
-<ul>
-<li><code>P</code> play / pause video segment</li>
-</ul>
-</blockquote>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step2-2.png"
-alt="Keyframe Panel on the left, you can play the video segment specified by the range or edit keyframe list. In the middle, you can change the frame of left/right panel by dragging the left/right thumb or the range, the purple below indicates the frames annotated by actions. One the right, you can quick locate the keyframe(s)." />
-<figcaption aria-hidden="true"><strong>Keyframe Panel</strong> on the
-left, you can play the video segment specified by the range or edit
-keyframe list. In the middle, you can change the frame of left/right
-panel by dragging the left/right thumb or the range, the purple below
-indicates the frames annotated by actions. One the right, you can quick
-locate the keyframe(s).</figcaption>
-</figure>
-<blockquote>
-<p>Some useful hot keys for frames control:</p>
-<ul>
-<li><code>COMMA, &lt;</code>, <code>PERIOD, &gt;</code> advance to
-previous / next keyframe</li>
-<li><code>LEFT-ARROW</code>, <code>RIGHT-ARROW</code> previous / next
-frame</li>
-<li><code>UP-ARROW</code>, <code>DOWN-ARROW</code> cycle through the
-frame slider: right &gt; range &gt; left</li>
-<li><code>PAGE-UP</code>, <code>PAGE-DOWN</code>, jump to previous /
-next 10% of video</li>
-</ul>
-</blockquote>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step2-3.png"
-alt="Left/Right Canvas Panel and Control Panel (in the middle) there is an action indicator on the left-bottom corner to show actions which cover current frame." />
-<figcaption aria-hidden="true"><strong>Left/Right Canvas Panel and
-Control Panel (in the middle)</strong> there is an action indicator on
-the left-bottom corner to show actions which cover current
-frame.</figcaption>
-</figure>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step2-4.png"
-alt="Action / Video Segment Table you can modify the action annotaion List." />
-<figcaption aria-hidden="true"><strong>Action / Video Segment
-Table</strong> you can modify the action annotaion List.</figcaption>
-</figure>
-<blockquote>
-<ul>
-<li><code>ADD</code> or press <code>PLUS (+)</code> key on your keyboard
-to add a new action</li>
-<li><code>CLEAR</code> bulk delete all actions</li>
-<li><code>start</code> start time in seconds</li>
-<li><code>end</code> end time in seconds</li>
-<li><code>duration</code> duration (end time - start time) in
-seconds</li>
-<li><code>action</code> the action label, in this task, it refers to
-steps</li>
-<li><code>object</code> the corresponding object label, please leave it
-as default in this task</li>
-<li><code>description</code></li>
-<li><img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/gps_fixed_black_24dp.svg" alt="locate" /> set
-start/end time as current left/right frame</li>
-<li><img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/edit_location_alt_black_24dp.svg" alt="edit" /> set
-current left/right frame as start/end time</li>
-<li><img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/delete_black_24dp.svg" alt="delete" /> delete this
-action</li>
-</ul>
-</blockquote>
-<h2 id="steps">Steps</h2>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-1.png"
-alt="Click the thumbnail to view each step. Click it again to close the popup." />
-<figcaption aria-hidden="true">Click the thumbnail to view each step.
-Click it again to close the popup.</figcaption>
-</figure>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-2.png"
-alt="Locate left and right panel to align start and end frame." />
-<figcaption aria-hidden="true">Locate left and right panel to align
-start and end frame.</figcaption>
-</figure>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-3.png"
-alt="Click the second button on the corresponding row to set start and end time for this segment." />
-<figcaption aria-hidden="true">Click the second button on the
-corresponding row to set start and end time for this
-segment.</figcaption>
-</figure>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-4.png"
-alt="Once the duration is longer than 0, the warning (yellow) color will disappear." />
-<figcaption aria-hidden="true">Once the duration is longer than 0, the
-warning (yellow) color will disappear.</figcaption>
-</figure>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-5.png"
-alt="Delete the segment if it is not shown in the video." />
-<figcaption aria-hidden="true">Delete the segment if it is not shown in
-the video.</figcaption>
-</figure>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-6.png"
-alt="Open the side menu after finishing annotation, and click submit button" />
-<figcaption aria-hidden="true">Open the side menu after finishing
-annotation, and click submit button</figcaption>
-</figure>
-<blockquote>
-<p>Please check the followings before submitting</p>
-<ul>
-<li>the video is not changed</li>
-<li>the configuration is not changed</li>
-<li>duration of each action is greater than 0</li>
-</ul>
-</blockquote>
-<figure>
-<img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-7.png"
-alt="Your submission id will be notified and copied to your clipboard." />
-<figcaption aria-hidden="true">Your submission id will be notified and
-copied to your clipboard.</figcaption>
-</figure>
+          <div class="panel panel-primary">
+            <a
+              class="panel-heading"
+              href="javascript:void(0);"
+              id="collapseTrigger"
+            >
+              <strong>Video Annotation Instructions</strong>
+              <span class="collapse-text">(Click to expand)</span>
+            </a>
+            <div class="panel-body" id="instructionBody">
+              <p class="warning">
+                <strong
+                  >Make sure to leave this window open as you complete the
+                  annotation.
+                </strong>
+                When you are finished, you will return to this page to paste the
+                submission code into the box.
+              </p>
 
-                    <h2>Tutorial Video</h1>
-                        <iframe width="896" height="512" src="https://www.youtube.com/embed/XsxGac7Z4Wk"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                        </iframe>
-                </div>
+              <h2 id="vidat-introduction">Vidat Introduction</h2>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step2-1.png"
+                  alt="Header a video caching status and a dark mode toggle. Once all frames are cached, you can change the frame smoothly."
+                />
+                <figcaption aria-hidden="true">
+                  <strong>Header</strong> a video caching status and a dark mode
+                  toggle. Once all frames are cached, you can change the frame
+                  smoothly.
+                </figcaption>
+              </figure>
+              <blockquote>
+                <p>some useful hot keys for video control:</p>
+                <ul>
+                  <li><code>P</code> play / pause video segment</li>
+                </ul>
+              </blockquote>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step2-2.png"
+                  alt="Keyframe Panel on the left, you can play the video segment specified by the range or edit keyframe list. In the middle, you can change the frame of left/right panel by dragging the left/right thumb or the range, the purple below indicates the frames annotated by actions. One the right, you can quick locate the keyframe(s)."
+                />
+                <figcaption aria-hidden="true">
+                  <strong>Keyframe Panel</strong> on the left, you can play the
+                  video segment specified by the range or edit keyframe list. In
+                  the middle, you can change the frame of left/right panel by
+                  dragging the left/right thumb or the range, the purple below
+                  indicates the frames annotated by actions. One the right, you
+                  can quick locate the keyframe(s).
+                </figcaption>
+              </figure>
+              <blockquote>
+                <p>Some useful hot keys for frames control:</p>
+                <ul>
+                  <li>
+                    <code>COMMA, &lt;</code>, <code>PERIOD, &gt;</code> advance
+                    to previous / next keyframe
+                  </li>
+                  <li>
+                    <code>LEFT-ARROW</code>, <code>RIGHT-ARROW</code> previous /
+                    next frame
+                  </li>
+                  <li>
+                    <code>UP-ARROW</code>, <code>DOWN-ARROW</code> cycle through
+                    the frame slider: right &gt; range &gt; left
+                  </li>
+                  <li>
+                    <code>PAGE-UP</code>, <code>PAGE-DOWN</code>, jump to
+                    previous / next 10% of video
+                  </li>
+                </ul>
+              </blockquote>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step2-3.png"
+                  alt="Left/Right Canvas Panel and Control Panel (in the middle) there is an action indicator on the left-bottom corner to show actions which cover current frame."
+                />
+                <figcaption aria-hidden="true">
+                  <strong
+                    >Left/Right Canvas Panel and Control Panel (in the
+                    middle)</strong
+                  >
+                  there is an action indicator on the left-bottom corner to show
+                  actions which cover current frame.
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step2-4.png"
+                  alt="Action / Video Segment Table you can modify the action annotaion List."
+                />
+                <figcaption aria-hidden="true">
+                  <strong>Action / Video Segment Table</strong> you can modify
+                  the action annotaion List.
+                </figcaption>
+              </figure>
+              <blockquote>
+                <ul>
+                  <li>
+                    <code>ADD</code> or press <code>PLUS (+)</code> key on your
+                    keyboard to add a new action
+                  </li>
+                  <li><code>CLEAR</code> bulk delete all actions</li>
+                  <li><code>start</code> start time in seconds</li>
+                  <li><code>end</code> end time in seconds</li>
+                  <li>
+                    <code>duration</code> duration (end time - start time) in
+                    seconds
+                  </li>
+                  <li>
+                    <code>action</code> the action label, in this task, it
+                    refers to steps
+                  </li>
+                  <li>
+                    <code>object</code> the corresponding object label, please
+                    leave it as default in this task
+                  </li>
+                  <li><code>description</code></li>
+                  <li>
+                    <img
+                      src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/gps_fixed_black_24dp.svg"
+                      alt="locate"
+                    />
+                    set start/end time as current left/right frame
+                  </li>
+                  <li>
+                    <img
+                      src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/edit_location_alt_black_24dp.svg"
+                      alt="edit"
+                    />
+                    set current left/right frame as start/end time
+                  </li>
+                  <li>
+                    <img
+                      src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/delete_black_24dp.svg"
+                      alt="delete"
+                    />
+                    delete this action
+                  </li>
+                </ul>
+              </blockquote>
+              <h2 id="steps">Steps</h2>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-1.png"
+                  alt="Click the thumbnail to view each step. Click it again to close the popup."
+                />
+                <figcaption aria-hidden="true">
+                  Click the thumbnail to view each step. Click it again to close
+                  the popup.
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-2.png"
+                  alt="Locate left and right panel to align start and end frame."
+                />
+                <figcaption aria-hidden="true">
+                  Locate left and right panel to align start and end frame.
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-3.png"
+                  alt="Click the second button on the corresponding row to set start and end time for this segment."
+                />
+                <figcaption aria-hidden="true">
+                  Click the second button on the corresponding row to set start
+                  and end time for this segment.
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-4.png"
+                  alt="Once the duration is longer than 0, the warning (yellow) color will disappear."
+                />
+                <figcaption aria-hidden="true">
+                  Once the duration is longer than 0, the warning (yellow) color
+                  will disappear.
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-5.png"
+                  alt="Delete the segment if it is not shown in the video."
+                />
+                <figcaption aria-hidden="true">
+                  Delete the segment if it is not shown in the video.
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-6.png"
+                  alt="Open the side menu after finishing annotation, and click submit button"
+                />
+                <figcaption aria-hidden="true">
+                  Open the side menu after finishing annotation, and click
+                  submit button
+                </figcaption>
+              </figure>
+              <blockquote>
+                <p>Please check the followings before submitting</p>
+                <ul>
+                  <li>the video is not changed</li>
+                  <li>the configuration is not changed</li>
+                  <li>duration of each action is greater than 0</li>
+                </ul>
+              </blockquote>
+              <figure>
+                <img
+                  src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-7.png"
+                  alt="Your submission id will be notified and copied to your clipboard."
+                />
+                <figcaption aria-hidden="true">
+                  Your submission id will be notified and copied to your
+                  clipboard.
+                </figcaption>
+              </figure>
+
+              <h2>Tutorial Video</h2>
+              <iframe
+                width="896"
+                height="512"
+                src="https://www.youtube.com/embed/XsxGac7Z4Wk"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              >
+              </iframe>
             </div>
+          </div>
         </div>
-    </div>
-    <div class="row" id="workContent">
+      </div>
+      <div class="row" id="workContent">
         <div class="col-xs-12 col-md-6 col-md-offset-3">
-            <table class="table table-condensed table-bordered">
-                <colgroup>
-                    <col class="col-xs-4 col-md-4"/>
-                    <col class="col-xs-8 col-md-8"/>
-                </colgroup>
-                <tbody>
-                <tr>
-                    <td>Task ID:</td>
-                    <td>${id}</td>
-                </tr>
-                <tr>
-                    <td>Vidat link:</td>
-                    <td>
-                        <a class="dont-break-out" href="${url}" target="_blank">
-                            ${url}
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="form-group">
-                <label for="submissionCode">Provide the submission code here:</label>
-                <input class="form-control" id="submissionCode" name="submissionCode"
-                       placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000" required type="text"/>
-                <label for="feedback">Provide general feedback (optional):</label>
-                <input class="form-control" id="feedback" name="feedback" placeholder="e.g. Vidat is awesome!"
-                       type="text"/>
-            </div>
+          <table class="table table-condensed table-bordered">
+            <colgroup>
+              <col class="col-xs-4 col-md-4" />
+              <col class="col-xs-8 col-md-8" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <td>Task ID:</td>
+                <td>${id}</td>
+              </tr>
+              <tr>
+                <td>Vidat link:</td>
+                <td>
+                  <a class="dont-break-out" href="${url}" target="_blank">
+                    ${url}
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="form-group">
+            <label for="submissionCode"
+              >Provide the submission code here*:</label
+            >
+            <input
+              class="form-control"
+              id="submissionCode"
+              name="submissionCode"
+              placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
+              required
+              type="text"
+              pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
+              aria-describedby="help"
+            />
+            <span id="help"
+              >Please provide the submission code obtained from Vidat.</span
+            >
+            <label for="feedback">Provide general feedback (optional):</label>
+            <input
+              class="form-control"
+              id="feedback"
+              name="feedback"
+              placeholder="e.g. Vidat is awesome!"
+              type="text"
+            />
+          </div>
         </div>
-    </div>
-</section>
-<script src="https://code.jquery.com/jquery-3.1.0.min.js"
-        integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"
-        integrity="sha384-s1ITto93iSMDxlp/79qhWHi+LsIi9Gx6yL+cOKDuymvihkfol83TYbLbOw+W/wv4"
-        crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function () {
-        var content = $('#instructionBody');
-        var trigger = $('#collapseTrigger');
+      </div>
+    </section>
+    <script
+      src="https://code.jquery.com/jquery-3.1.0.min.js"
+      integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        const content = $("#instructionBody");
+        const trigger = $("#collapseTrigger");
         content.hide();
-        $('.collapse-text').text('(Click to expand)');
+        $(".collapse-text").text("(Click to expand)");
         trigger.click(function () {
-            content.toggle();
-            var isVisible = content.is(':visible');
-            if (isVisible) {
-                $('.collapse-text').text('(Click to collapse)');
-            } else {
-                $('.collapse-text').text('(Click to expand)');
-            }
+          content.toggle();
+          const isVisible = content.is(":visible");
+          if (isVisible) {
+            $(".collapse-text").text("(Click to collapse)");
+          } else {
+            $(".collapse-text").text("(Click to expand)");
+          }
         });
-    });
-</script>
-</body>
+        const uuidInputElement = $("#submissionCode");
+        const uuidHelpElement = $("#help");
+        uuidInputElement.on("input", function (event) {
+          if (
+            /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(
+              event.target.value
+            )
+          ) {
+            uuidHelpElement.hide();
+          } else {
+            uuidHelpElement.show();
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

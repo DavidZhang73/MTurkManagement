@@ -11,3 +11,5 @@ pandoc instruction-turker.md `
 --standalone
 
 python ./post-process.py
+
+prettier --write --loglevel silent ../../MTurkFrontend/index.html

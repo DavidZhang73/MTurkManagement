@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
-          integrity="sha384-IS73LIqjtYesmURkDE9MXKbXqYA8rvKEp/ghicjem7Vc3mGRdQRptJSz60tvrB6+" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <style type="text/css">
         #collapseTrigger {
             color: #fff;
@@ -45,6 +45,10 @@
         figure {
             margin: 10px 0;
         }
+
+        #help {
+            color: #c42b1c;
+        }
     </style>
 </head>
 <body>
@@ -63,12 +67,12 @@
                         annotation. </strong> When you are
                         finished, you will return to this page to paste the submission code into the box.</p>
                     INSTRUCTION_TEMPLATE
-                    <h2>Tutorial Video</h1>
-                        <iframe width="896" height="512" src="https://www.youtube.com/embed/XsxGac7Z4Wk"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                        </iframe>
+                    <h2>Tutorial Video</h2>
+                    <iframe width="896" height="512" src="https://www.youtube.com/embed/XsxGac7Z4Wk"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
                 </div>
             </div>
         </div>
@@ -96,9 +100,17 @@
                 </tbody>
             </table>
             <div class="form-group">
-                <label for="submissionCode">Provide the submission code here:</label>
-                <input class="form-control" id="submissionCode" name="submissionCode"
-                       placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000" required type="text"/>
+                <label for="submissionCode">Provide the submission code here*:</label>
+                <input class="form-control"
+                       id="submissionCode"
+                       name="submissionCode"
+                       placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
+                       required
+                       type="text"
+                       pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
+                       aria-describedby="help"
+                />
+                <span id="help">Please provide the submission code obtained from Vidat.</span>
                 <label for="feedback">Provide general feedback (optional):</label>
                 <input class="form-control" id="feedback" name="feedback" placeholder="e.g. Vidat is awesome!"
                        type="text"/>
@@ -108,24 +120,33 @@
 </section>
 <script src="https://code.jquery.com/jquery-3.1.0.min.js"
         integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"
-        integrity="sha384-s1ITto93iSMDxlp/79qhWHi+LsIi9Gx6yL+cOKDuymvihkfol83TYbLbOw+W/wv4"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        var content = $('#instructionBody');
-        var trigger = $('#collapseTrigger');
+        const content = $('#instructionBody');
+        const trigger = $('#collapseTrigger');
         content.hide();
         $('.collapse-text').text('(Click to expand)');
         trigger.click(function () {
             content.toggle();
-            var isVisible = content.is(':visible');
+            const isVisible = content.is(':visible');
             if (isVisible) {
                 $('.collapse-text').text('(Click to collapse)');
             } else {
                 $('.collapse-text').text('(Click to expand)');
             }
         });
+        const uuidInputElement = $("#submissionCode")
+        const uuidHelpElement = $("#help")
+        uuidInputElement.on('input', function (event) {
+            if (/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(event.target.value)) {
+                uuidHelpElement.hide()
+            } else {
+                uuidHelpElement.show()
+            }
+        })
     });
 </script>
 </body>
