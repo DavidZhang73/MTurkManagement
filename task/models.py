@@ -68,11 +68,11 @@ class Task(AnnotationModel):
         VIDAT_DEFAULT_FPS = Settings.objects.get(name='VIDAT_DEFAULT_FPS').value
         VIDAT_DEFAULT_FPK = Settings.objects.get(name='VIDAT_DEFAULT_FPK').value
         return f'{VIDAT_URL}' \
-               f'?annotation={self.annotation_pathname}' \
+               f'?annotation={urllib.parse.quote(self.annotation_pathname)}' \
                f'&showObjects=false&showRegions=false&showSkeletons=false&showActions=true' \
                f'&showPopup=false&grayscale=false&decoder=auto&muted=false&zoom=false' \
                f'&defaultFps={VIDAT_DEFAULT_FPS}&defaultFpk={VIDAT_DEFAULT_FPK}' \
-               f'&submitURL={urllib.parse.quote_plus(VIDAT_SUMIT_URL + "/" + str(self.id) + "/")}'
+               f'&submitURL={urllib.parse.quote(VIDAT_SUMIT_URL + "/" + str(self.id) + "/")}'
 
     def __str__(self):
         return f'Task {self.pk}'
@@ -105,11 +105,11 @@ class Assignment(AnnotationModel):
         VIDAT_AUDIT_URL = Settings.objects.get(name='VIDAT_AUDIT_URL').value
         VIDAT_DEFAULT_FPS = Settings.objects.get(name='VIDAT_DEFAULT_FPS').value
         VIDAT_DEFAULT_FPK = Settings.objects.get(name='VIDAT_DEFAULT_FPK').value
-        return f'{VIDAT_URL}?annotation={annotation_pathname}' \
+        return f'{VIDAT_URL}?annotation={urllib.parse.quote(annotation_pathname)}' \
                f'&showObjects=false&showRegions=false&showSkeletons=false&showActions=true' \
                f'&showPopup=false&grayscale=false&decoder=auto&muted=false&zoom=false' \
                f'&defaultFps={VIDAT_DEFAULT_FPS}&defaultFpk={VIDAT_DEFAULT_FPK}' \
-               f'&submitURL={urllib.parse.quote_plus(VIDAT_AUDIT_URL + "/" + str(self.uuid) + "/")}'
+               f'&submitURL={urllib.parse.quote(VIDAT_AUDIT_URL + "/" + str(self.uuid) + "/")}'
 
     def __str__(self):
         return f'Assignment {self.uuid}'
