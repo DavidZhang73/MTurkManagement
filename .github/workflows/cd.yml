@@ -22,7 +22,7 @@ jobs:
           POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
         run: |
           docker login --username=${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
-          docker build --build-arg MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}  --build-arg POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }} . -t ${{ secrets.REGISTRY }}:$SHA
+          docker build --build-arg MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} --build-arg POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }} . -t ${{ secrets.REGISTRY }}:$SHA
           docker push ${{ secrets.REGISTRY }}:$SHA
           docker tag $(docker images ${{ secrets.REGISTRY }}:$SHA -q) ${{ secrets.REGISTRY }}:latest
           docker push ${{ secrets.REGISTRY }}:latest
@@ -36,8 +36,10 @@ jobs:
           script: |
             docker stop $(docker ps --filter ancestor=${{ secrets.REGISTRY }} -q)
             docker rm -f $(docker ps -a --filter ancestor=${{ secrets.REGISTRY }}:latest -q)
-            docker rmi -f $(docker images  ${{ secrets.REGISTRY }}:latest -q)
+            docker tag ${{ secrets.REGISTRY }}:latest ${{ secrets.REGISTRY }}:last
+            docker rmi ${{ secrets.REGISTRY }}:latest
             docker login --username=${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
             docker pull ${{ secrets.REGISTRY }}:latest
+            docker rmi -f $(docker images ${{ secrets.REGISTRY }}:last -q)
             docker run --detach --restart=unless-stopped --name MTurkManagement --publish 8006:8000 --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} --env POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }} --volume /docker/IkeaAssemblyInstructionDataset/dataset:/MTurkManagement/dataset ${{ secrets.REGISTRY }}:latest 
             docker cp MTurkManagement:/MTurkManagement/static /docker/MTurkManagement/static
