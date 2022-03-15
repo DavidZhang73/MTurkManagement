@@ -55,6 +55,38 @@ autoSectionLabels: true
 
 # Annotation In Vidat
 
+## Steps
+
+#### Step 1
+
+![Click the thumbnail to view each step. Click it again to close the popup.](img/step3-1.png)
+
+#### Step 2
+
+![Locate left and right panel to align start and end frame.](img/step3-2.png)
+
+#### Step 3
+
+![Click the second button on the corresponding row to set start and end time for this segment.](img/step3-3.png)
+
+![Once the duration is longer than 0, the warning (yellow) color will disappear.](img/step3-4.png)
+
+#### Step 4
+
+![Delete the segment if it is not shown in the video.](img/step3-5.png)
+
+#### Step 5
+
+![Open the side menu after finishing annotation, and click submit button](img/step3-6.png)
+
+> Please check the followings before submitting
+>
+> - the video is not changed
+> - the configuration is not changed
+> - duration of each action is greater than 0
+
+![Your submission id will be notified and copied to your clipboard.](img/step3-7.png)
+
 ## Vidat Introduction
 
 ![**Header** a video caching status and a dark mode toggle. Once all frames are cached, you can change the frame smoothly.](img/step2-1.png)
@@ -87,28 +119,6 @@ autoSectionLabels: true
 > - ![locate](img/gps_fixed_black_24dp.svg) set start/end time as current left/right frame
 > - ![edit](img/edit_location_alt_black_24dp.svg) set current left/right frame as start/end time
 > - ![delete](img/delete_black_24dp.svg) delete this action
-
-## Steps
-
-![Click the thumbnail to view each step. Click it again to close the popup.](img/step3-1.png)
-
-![Locate left and right panel to align start and end frame.](img/step3-2.png)
-
-![Click the second button on the corresponding row to set start and end time for this segment.](img/step3-3.png)
-
-![Once the duration is longer than 0, the warning (yellow) color will disappear.](img/step3-4.png)
-
-![Delete the segment if it is not shown in the video.](img/step3-5.png)
-
-![Open the side menu after finishing annotation, and click submit button](img/step3-6.png)
-
-> Please check the followings before submitting
->
-> - the video is not changed
-> - the configuration is not changed
-> - duration of each action is greater than 0
-
-![Your submission id will be notified and copied to your clipboard.](img/step3-7.png)
 
 # Submit In MTurk
 
