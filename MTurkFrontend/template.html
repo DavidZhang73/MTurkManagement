@@ -122,23 +122,30 @@
                        pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
                        aria-describedby="help"
                 />
+                <span id="help">Please provide the submission code obtained from Vidat.</span>
                 <label for="peopleCount">How many people are involved during assembly?*:</label>
-                <input class="form-control"
-                       id="peopleCount"
-                       name="peopleCount"
-                       value="1"
-                       required
-                       type="number"
-                />
+                <select class="form-control" id="peopleCount" name="peopleCount">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="more">More</option>
+                </select>
+                <label for="personView">Is it first-person or third-person view?*:</label>
+                <select class="form-control" id="personView" name="personView">
+                    <option value="firstPerson">First-person</option>
+                    <option value="thirdPerson">Third-person</option>
+                    <option value="both">Both</option>
+                </select>
                 <label for="isFixed">Is the camera fixed or not?*:</label>
                 <select class="form-control" id="isFixed" name="isFixed">
-                    <option value="true">Fixed</option>
-                    <option value="false">Not fixed</option>
+                    <option value="fixed">Fixed</option>
+                    <option value="notFixed">Not fixed</option>
+                    <option value="both">Both</option>
                 </select>
                 <label for="isIndoor">Is it indoor or outdoor?*:</label>
                 <select class="form-control" id="isIndoor" name="isIndoor">
-                    <option value="true">Indoor</option>
-                    <option value="false">Outdoor</option>
+                    <option value="indoor">Indoor</option>
+                    <option value="outdoor">Outdoor</option>
+                    <option value="both">Both</option>
                 </select>
                 <label for="feedback">Provide general feedback (optional):</label>
                 <input class="form-control" id="feedback" name="feedback" placeholder="e.g. Vidat is awesome!"

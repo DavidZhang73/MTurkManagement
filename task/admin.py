@@ -22,6 +22,7 @@ html_content_reg = re.compile(r'<HTMLContent>([\s\S]+?)</HTMLContent>')
 task_id_reg = re.compile(r'<td>Task ID:</td>\s+?<td>(\d+)</td>')
 answer_submission_code_reg = re.compile(r'submissionCode</QuestionIdentifier><FreeText>(.+?)</FreeText>')
 answer_people_count_reg = re.compile(r'peopleCount</QuestionIdentifier><FreeText>(.+?)</FreeText>')
+answer_person_view_reg = re.compile(r'personView</QuestionIdentifier><FreeText>(.+?)</FreeText>')
 answer_is_fixed_reg = re.compile(r'isFixed</QuestionIdentifier><FreeText>(.+?)</FreeText>')
 answer_is_indoor_reg = re.compile(r'isIndoor</QuestionIdentifier><FreeText>(.+?)</FreeText>')
 answer_feedback_reg = re.compile(r'feedback</QuestionIdentifier><FreeText>(.+?)</FreeText>')
@@ -281,6 +282,7 @@ class AssignmentAdmin(AjaxAdmin):
         'created_datetime',
         'last_modified_datetime',
         'people_count',
+        'person_view',
         'is_fixed',
         'is_indoor',
         'mturk_assignment_status',
@@ -354,15 +356,19 @@ class AssignmentAdmin(AjaxAdmin):
 
                         people_count_result = answer_people_count_reg.findall(answer)
                         if people_count_result:
-                            assignment.people_count = int(people_count_result[0])
+                            assignment.people_count = people_count_result[0]
+
+                        person_view_result = answer_person_view_reg.findall(answer)
+                        if person_view_result:
+                            assignment.person_view = person_view_result[0]
 
                         is_fixed_result = answer_is_fixed_reg.findall(answer)
                         if is_fixed_result:
-                            assignment.is_fixed = is_fixed_result[0] == 'true'
+                            assignment.is_fixed = is_fixed_result[0]
 
                         is_indoor_result = answer_is_indoor_reg.findall(answer)
                         if is_indoor_result:
-                            assignment.is_indoor = is_indoor_result[0] == 'true'
+                            assignment.is_indoor = is_indoor_result[0]
 
                         feedback_result = answer_feedback_reg.findall(answer)
                         if feedback_result:

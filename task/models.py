@@ -104,9 +104,10 @@ class Assignment(AnnotationModel):
     final_annotation_pathname = models.CharField(max_length=1024, blank=True, null=True)
     last_modified_datetime = models.DateTimeField(auto_now=True)
 
-    people_count = models.IntegerField(default=1, blank=True, null=True)
-    is_fixed = models.BooleanField(default=True, blank=True, null=True)
-    is_indoor = models.BooleanField(default=True, blank=True, null=True)
+    people_count = models.CharField(max_length=16, blank=True, null=True)
+    person_view = models.CharField(max_length=16, blank=True, null=True)
+    is_fixed = models.CharField(max_length=16, blank=True, null=True)
+    is_indoor = models.CharField(max_length=16, blank=True, null=True)
 
     mturk_assignment_id = models.CharField(max_length=128, null=True, editable=False)
     mturk_assignment_status = models.CharField(max_length=32, null=True, editable=False)
