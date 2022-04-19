@@ -321,6 +321,18 @@
                   </a>
                 </td>
               </tr>
+              <tr>
+                <td>Video:</td>
+                <td>
+                  <a class="dont-break-out" href="${video}" target="_blank">
+                    ${video}
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>Manual(s):</td>
+                <td id="manuals"></td>
+              </tr>
             </tbody>
           </table>
           <div class="form-group">
@@ -337,9 +349,27 @@
               pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
               aria-describedby="help"
             />
-            <span id="help"
-              >Please provide the submission code obtained from Vidat.</span
+            <label for="peopleCount"
+              >How many people are involved during assembly?*:</label
             >
+            <input
+              class="form-control"
+              id="peopleCount"
+              name="peopleCount"
+              value="1"
+              required
+              type="number"
+            />
+            <label for="isFixed">Is the camera fixed or not?*:</label>
+            <select class="form-control" id="isFixed" name="isFixed">
+              <option value="true">Fixed</option>
+              <option value="false">Not fixed</option>
+            </select>
+            <label for="isIndoor">Is it indoor or outdoor?*:</label>
+            <select class="form-control" id="isIndoor" name="isIndoor">
+              <option value="true">Indoor</option>
+              <option value="false">Outdoor</option>
+            </select>
             <label for="feedback">Provide general feedback (optional):</label>
             <input
               class="form-control"
@@ -364,33 +394,39 @@
     ></script>
     <script>
       $(document).ready(function () {
-        const content = $("#instructionBody");
-        const trigger = $("#collapseTrigger");
-        content.hide();
-        $(".collapse-text").text("(Click to expand)");
-        trigger.click(function () {
-          content.toggle();
-          const isVisible = content.is(":visible");
-          if (isVisible) {
-            $(".collapse-text").text("(Click to collapse)");
-          } else {
-            $(".collapse-text").text("(Click to expand)");
+          // handle collapse
+          const content = $('#instructionBody')
+          const trigger = $('#collapseTrigger')
+          content.hide()
+          $('.collapse-text').text('(Click to expand)')
+          trigger.click(function () {
+              content.toggle()
+              const isVisible = content.is(':visible')
+              if (isVisible) {
+                  $('.collapse-text').text('(Click to collapse)')
+              } else {
+                  $('.collapse-text').text('(Click to expand)')
+              }
+          })
+          // check uuid
+          const uuidInputElement = $("#submissionCode")
+          const uuidHelpElement = $("#help")
+          uuidInputElement.on('input', function (event) {
+              if (/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(event.target.value)) {
+                  uuidHelpElement.hide()
+              } else {
+                  uuidHelpElement.show()
+              }
+          })
+          // handle manual links
+          const manualsElement = $('#manuals')
+          const manualList = ${manual_list}
+          for (let i = 0; i < manualList.length; i++) {
+              const link = manualList[i]
+              const manualElement = $('<a class="" href="' + link + '" target="_blank">Manual ' + (i + 1) + '</a>')
+              manualsElement.append(manualElement)
           }
-        });
-        const uuidInputElement = $("#submissionCode");
-        const uuidHelpElement = $("#help");
-        uuidInputElement.on("input", function (event) {
-          if (
-            /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(
-              event.target.value
-            )
-          ) {
-            uuidHelpElement.hide();
-          } else {
-            uuidHelpElement.show();
-          }
-        });
-      });
+      })
     </script>
   </body>
 </html>
