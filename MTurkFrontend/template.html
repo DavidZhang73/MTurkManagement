@@ -122,7 +122,24 @@
                        pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
                        aria-describedby="help"
                 />
-                <span id="help">Please provide the submission code obtained from Vidat.</span>
+                <label for="peopleCount">How many people are involved during assembly?*:</label>
+                <input class="form-control"
+                       id="peopleCount"
+                       name="peopleCount"
+                       value="1"
+                       required
+                       type="number"
+                />
+                <label for="isFixed">Is the camera fixed or not?*:</label>
+                <select class="form-control" id="isFixed">
+                    <option>Fixed</option>
+                    <option>Not fixed</option>
+                </select>
+                <label for="isIndoor">Is it indoor or outdoor?*:</label>
+                <select class="form-control" id="isIndoor">
+                    <option>Indoor</option>
+                    <option>Outdoor</option>
+                </select>
                 <label for="feedback">Provide general feedback (optional):</label>
                 <input class="form-control" id="feedback" name="feedback" placeholder="e.g. Vidat is awesome!"
                        type="text"/>
