@@ -18,6 +18,12 @@ def get_random_color():
 
 
 def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH, batch_id):
+    item_path = os.path.join(DATASET_PATH, item_category, item_subCategory, item_id)
+    step_path = os.path.join(item_path, 'step')
+    manual_path = os.path.join(item_path, 'manual')
+    # config
+    annotation_path = os.path.join(item_path, 'annotation')
+    os.makedirs(annotation_path, exist_ok=True)
     config = {
         "objectLabelData": [
             {
@@ -31,7 +37,10 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH,
                 "id": 0,
                 "name": "default",
                 "color": "#0000FF",
-                "thumbnail": '',
+                "thumbnail": "/" + "/".join(
+                    [DATASET_PATH, item_category, item_subCategory, item_id,
+                     [img for img in os.listdir(item_path) if
+                      os.path.isfile(os.path.join(item_path, img)) and img.endswith('.jpg')][0]]),
                 "objects": [
                     0
                 ]
@@ -39,10 +48,7 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH,
         ],
         "skeletonTypeData": []
     }
-    item_path = os.path.join(DATASET_PATH, item_category, item_subCategory, item_id)
-    step_path = os.path.join(item_path, 'step')
-    annotation_path = os.path.join(item_path, 'annotation')
-    os.makedirs(annotation_path, exist_ok=True)
+    # step
     action_annotation_list = []
     for index, step_file in enumerate(sorted(os.listdir(step_path), key=lambda name: int(reg.findall(name)[0]))):
         random_color = get_random_color()
@@ -64,8 +70,13 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH,
             "color": random_color,
             "description": ""
         })
+    # video
     video_id = video_url.replace("https://www.youtube.com/watch?v=", "")
     video_name = f'{video_id}.mp4'
+    # manual
+    manual_list = [os.path.join(manual_path, manual) for manual in os.listdir(manual_path) if
+                   os.path.isfile(os.path.join(manual_path, manual)) and manual.endswith('.pdf')]
+
     if Task.objects.count():
         task_id = Task.objects.latest('id').id + 1
     else:
@@ -90,7 +101,8 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH,
         },
         annotation_pathname="/" + "/".join(
             [DATASET_PATH, item_category, item_subCategory, item_id, 'annotation',
-             f'task-{task_id}-{item_id}-{video_id}.json'])
+             f'task-{task_id}-{item_id}-{video_id}.json']),
+        manual_list=manual_list,
     ).save()
 
 

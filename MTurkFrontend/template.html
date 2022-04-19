@@ -97,6 +97,18 @@
                         </a>
                     </td>
                 </tr>
+                <tr>
+                    <td>Video:</td>
+                    <td>
+                        <a class="dont-break-out" href="${video}" target="_blank">
+                            ${video}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Manual(s):</td>
+                    <td id="manuals"></td>
+                </tr>
                 </tbody>
             </table>
             <div class="form-group">
@@ -125,19 +137,21 @@
         crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        const content = $('#instructionBody');
-        const trigger = $('#collapseTrigger');
-        content.hide();
-        $('.collapse-text').text('(Click to expand)');
+        // handle collapse
+        const content = $('#instructionBody')
+        const trigger = $('#collapseTrigger')
+        content.hide()
+        $('.collapse-text').text('(Click to expand)')
         trigger.click(function () {
-            content.toggle();
-            const isVisible = content.is(':visible');
+            content.toggle()
+            const isVisible = content.is(':visible')
             if (isVisible) {
-                $('.collapse-text').text('(Click to collapse)');
+                $('.collapse-text').text('(Click to collapse)')
             } else {
-                $('.collapse-text').text('(Click to expand)');
+                $('.collapse-text').text('(Click to expand)')
             }
-        });
+        })
+        // check uuid
         const uuidInputElement = $("#submissionCode")
         const uuidHelpElement = $("#help")
         uuidInputElement.on('input', function (event) {
@@ -147,7 +161,15 @@
                 uuidHelpElement.show()
             }
         })
-    });
+        // handle manual links
+        const manualsElement = $('#manuals')
+        const manualList = ${manual_list}
+        for (let i = 0; i < manualList.length; i++) {
+            const link = manualList[i]
+            const manualElement = $('<a class="" href="' + link + '" target="_blank">Manual ' + (i + 1) + '</a>')
+            manualsElement.append(manualElement)
+        }
+    })
 </script>
 </body>
 </html>

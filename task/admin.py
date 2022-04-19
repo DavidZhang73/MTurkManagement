@@ -131,13 +131,21 @@ class BatchAdmin(AjaxAdmin):
 
 class TaskResources(resources.ModelResource):
     url = Field()
+    video = Field()
 
     def dehydrate_url(self, task):
         return task.url()
 
+    def dehydrate_video(self, task):
+        return task.video_url()
+
+    def dehydrate_manual_list(self, task):
+        return task.manual_url_list()
+
     class Meta:
         model = Task
-        fields = ('id', 'url')
+        fields = ('id', 'url', 'video', 'manual_list')
+        export_order = ('id', 'url', 'video', 'manual_list')
 
 
 @admin.register(Task)

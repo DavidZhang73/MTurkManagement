@@ -7,6 +7,7 @@ from django.db import models
 class AnnotationModel(models.Model):
     annotation = models.JSONField()
     annotation_pathname = models.CharField(max_length=1024, blank=True, null=True)
+    manual_list = models.JSONField(default=list, blank=True)
     description = models.TextField(blank=True, null=True)
     created_datetime = models.DateTimeField(auto_now_add=True)
 
@@ -73,6 +74,17 @@ class Task(AnnotationModel):
                f'&showPopup=false&grayscale=false&decoder=auto&muted=false&zoom=false' \
                f'&defaultFps={VIDAT_DEFAULT_FPS}&defaultFpk={VIDAT_DEFAULT_FPK}' \
                f'&submitURL={urllib.parse.quote(VIDAT_SUMIT_URL + "/" + str(self.id) + "/")}'
+
+    def manual_url_list(self):
+        VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
+        return [
+            f'{VIDAT_URL}{manual}' for manual in self.manual_list
+        ]
+
+    def video_url(self):
+        VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
+        return f'{VIDAT_URL}{self.video_pathname()}'
+
 
     def __str__(self):
         return f'Task {self.pk}'
