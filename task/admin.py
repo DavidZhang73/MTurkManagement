@@ -21,6 +21,9 @@ external_reg = re.compile(r'<ExternalURL>(.+?)</ExternalURL>')
 html_content_reg = re.compile(r'<HTMLContent>([\s\S]+?)</HTMLContent>')
 task_id_reg = re.compile(r'<td>Task ID:</td>\s+?<td>(\d+)</td>')
 answer_submission_code_reg = re.compile(r'submissionCode</QuestionIdentifier><FreeText>(.+?)</FreeText>')
+answer_people_count_reg = re.compile(r'peopleCount</QuestionIdentifier><FreeText>(.+?)</FreeText>')
+answer_is_fixed_reg = re.compile(r'isFixed</QuestionIdentifier><FreeText>(.+?)</FreeText>')
+answer_is_indoor_reg = re.compile(r'isIndoor</QuestionIdentifier><FreeText>(.+?)</FreeText>')
 answer_feedback_reg = re.compile(r'feedback</QuestionIdentifier><FreeText>(.+?)</FreeText>')
 
 
@@ -277,6 +280,9 @@ class AssignmentAdmin(AjaxAdmin):
         'description',
         'created_datetime',
         'last_modified_datetime',
+        'people_count',
+        'is_fixed',
+        'is_indoor',
         'mturk_assignment_status',
         'mturk_worker_feedback',
         'mturk_worker_accept_time',
@@ -345,9 +351,23 @@ class AssignmentAdmin(AjaxAdmin):
                         assignment.mturk_worker_id = assignment2.get('WorkerId')
                         assignment.mturk_worker_accept_time = assignment2.get('AcceptTime')
                         assignment.mturk_worker_submit_time = assignment2.get('SubmitTime')
+
+                        people_count_result = answer_people_count_reg.findall(answer)
+                        if people_count_result:
+                            assignment.people_count = int(people_count_result[0])
+
+                        is_fixed_result = answer_is_fixed_reg.findall(answer)
+                        if is_fixed_result:
+                            assignment.is_fixed = is_fixed_result[0] == 'true'
+
+                        is_indoor_result = answer_is_indoor_reg.findall(answer)
+                        if is_indoor_result:
+                            assignment.is_indoor = is_indoor_result[0] == 'true'
+
                         feedback_result = answer_feedback_reg.findall(answer)
                         if feedback_result:
                             assignment.mturk_worker_feedback = feedback_result[0]
+
                         if assignment2.get('AssignmentStatus') == 'Submitted':
                             assignment.status = Assignment.STATUS.SUBMITTED
                         assignment.save()

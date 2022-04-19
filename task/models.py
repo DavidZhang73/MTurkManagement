@@ -85,7 +85,6 @@ class Task(AnnotationModel):
         VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
         return f'{VIDAT_URL}{self.video_pathname()}'
 
-
     def __str__(self):
         return f'Task {self.pk}'
 
@@ -105,9 +104,14 @@ class Assignment(AnnotationModel):
     final_annotation_pathname = models.CharField(max_length=1024, blank=True, null=True)
     last_modified_datetime = models.DateTimeField(auto_now=True)
 
+    people_count = models.IntegerField(default=1, blank=True, null=True)
+    is_fixed = models.BooleanField(default=True, blank=True, null=True)
+    is_indoor = models.BooleanField(default=True, blank=True, null=True)
+
     mturk_assignment_id = models.CharField(max_length=128, null=True, editable=False)
     mturk_assignment_status = models.CharField(max_length=32, null=True, editable=False)
     mturk_worker_id = models.CharField(max_length=128, null=True, editable=False)
+    mturk_worker_status = models.CharField(max_length=32, null=True, editable=False)
     mturk_worker_feedback = models.TextField(null=True, editable=False)
     mturk_worker_accept_time = models.DateTimeField(null=True, editable=False)
     mturk_worker_submit_time = models.DateTimeField(null=True, editable=False)
