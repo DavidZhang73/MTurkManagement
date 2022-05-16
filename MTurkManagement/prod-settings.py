@@ -11,4 +11,4 @@ DATABASES['default'] = {
     'PORT': os.environ.get('POSTGRESQL_PORT'),
 }
 
-ALLOWED_HOSTS = ['mturk.davidz.cn', 'vidat.cecs.anu.edu.au:8000']
+ALLOWED_HOSTS = ['mturk.davidz.cn', 'vidat.cecs.anu.edu.au']

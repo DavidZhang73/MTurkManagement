@@ -52,5 +52,5 @@ jobs:
                 --env POSTGRESQL_PORT=5432 \
                 --volume /docker/IkeaAssemblyInstructionDataset/dataset:/MTurkManagement/dataset \
                 ${{ secrets.REGISTRY }}:latest
-            docker cp MTurkManagement:/MTurkManagement/static /docker/MTurkManagement/static
+            docker cp MTurkManagement:/MTurkManagement/static /docker/MTurkManagement
             docker exec MTurkManagement /bin/bash -c 'cd /MTurkManagement && python manage.py migrate'
