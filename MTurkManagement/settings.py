@@ -86,8 +86,8 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'IkeaAssemblyInstruction',
         'CLIENT': {
-            'host': 'davidz.cn:27017',
-            'username': 'david',
+            'host': os.environ.get('MONGO_HOST'),
+            'username': os.environ.get('MONGO_USER'),
             'password': os.environ.get('MONGO_PASSWORD')
         }
     }
@@ -146,6 +146,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://vidat.davidz.cn",
     "https://vidat2.davidz.cn",
+    "http://vidat.cecs.anu.edu.au",
+    "https://vidat.cecs.anu.edu.au",
 ]
 
 # Simple UI

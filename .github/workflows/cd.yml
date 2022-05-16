@@ -18,11 +18,9 @@ jobs:
       - name: Push Docker image
         env:
           SHA: ${{ steps.short-sha.outputs.sha }}
-          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-          POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
         run: |
           docker login --username=${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
-          docker build --build-arg MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} --build-arg POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }} . -t ${{ secrets.REGISTRY }}:$SHA
+          docker build . -t ${{ secrets.REGISTRY }}:$SHA
           docker push ${{ secrets.REGISTRY }}:$SHA
           docker tag $(docker images ${{ secrets.REGISTRY }}:$SHA -q) ${{ secrets.REGISTRY }}:latest
           docker push ${{ secrets.REGISTRY }}:latest
@@ -41,5 +39,18 @@ jobs:
             docker login --username=${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
             docker pull ${{ secrets.REGISTRY }}:latest
             docker rmi -f $(docker images ${{ secrets.REGISTRY }}:last -q)
-            docker run --detach --restart=unless-stopped --name MTurkManagement --publish 8006:8000 --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} --env POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }} --volume /docker/IkeaAssemblyInstructionDataset/dataset:/MTurkManagement/dataset ${{ secrets.REGISTRY }}:latest 
+            docker run --detach \
+                --restart=unless-stopped \
+                --name MTurkManagement \
+                --publish 8006:8000 \
+                --env MONGO_HOST=davidz.cn:27017 \
+                --env MONGO_USER=david \
+                --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
+                --env POSTGRESQL_USER=postgres \
+                --env POSTGRESQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD }} \
+                --env POSTGRESQL_HOST=${{ secrets.HOST }} \
+                --env POSTGRESQL_PORT=5432 \
+                --volume /docker/IkeaAssemblyInstructionDataset/dataset:/MTurkManagement/dataset \
+                ${{ secrets.REGISTRY }}:latest
             docker cp MTurkManagement:/MTurkManagement/static /docker/MTurkManagement/static
+            docker exec MTurkManagement /bin/bash -c 'cd /MTurkManagement && python manage.py migrate'
