@@ -112,8 +112,8 @@
     "pk": 13,
     "fields": {
       "name": "MTURK_BATCH_REVIEW",
-      "value": "https://requester.mturk.com/batches/",
-      "description": "Sandbox: https://requestersandbox.mturk.com/batches/\nLive: https://requester.mturk.com/batches/"
+      "value": "https://requester.mturk.com/batches",
+      "description": "Sandbox: https://requestersandbox.mturk.com/batches\nLive: https://requester.mturk.com/batches"
     }
   }
 ]

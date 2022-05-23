@@ -60,7 +60,7 @@ class BatchAdmin(AjaxAdmin):
 
         if instance.mturk_batch_id:
             return format_html(
-                '<a href="{}{}/results" target="_blank">{}</a>',
+                '<a href="{}/{}/results" target="_blank">{}</a>',
                 Settings.objects.get(name='MTURK_BATCH_REVIEW').value,
                 instance.mturk_batch_id,
                 instance.mturk_batch_id,

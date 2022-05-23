@@ -68,7 +68,7 @@ class Task(AnnotationModel):
         VIDAT_SUMIT_URL = Settings.objects.get(name='VIDAT_SUMIT_URL').value
         VIDAT_DEFAULT_FPS = Settings.objects.get(name='VIDAT_DEFAULT_FPS').value
         VIDAT_DEFAULT_FPK = Settings.objects.get(name='VIDAT_DEFAULT_FPK').value
-        return f'{VIDAT_URL}' \
+        return f'{VIDAT_URL}/' \
                f'?annotation={urllib.parse.quote(self.annotation_pathname)}' \
                f'&showObjects=false&showRegions=false&showSkeletons=false&showActions=true' \
                f'&showPopup=false&grayscale=false&decoder=auto&muted=false&zoom=false' \
@@ -122,7 +122,7 @@ class Assignment(AnnotationModel):
         VIDAT_AUDIT_URL = Settings.objects.get(name='VIDAT_AUDIT_URL').value
         VIDAT_DEFAULT_FPS = Settings.objects.get(name='VIDAT_DEFAULT_FPS').value
         VIDAT_DEFAULT_FPK = Settings.objects.get(name='VIDAT_DEFAULT_FPK').value
-        return f'{VIDAT_URL}?annotation={urllib.parse.quote(annotation_pathname)}' \
+        return f'{VIDAT_URL}/?annotation={urllib.parse.quote(annotation_pathname)}' \
                f'&showObjects=false&showRegions=false&showSkeletons=false&showActions=true' \
                f'&showPopup=false&grayscale=false&decoder=auto&muted=false&zoom=false' \
                f'&defaultFps={VIDAT_DEFAULT_FPS}&defaultFpk={VIDAT_DEFAULT_FPK}' \
