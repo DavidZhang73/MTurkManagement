@@ -23,7 +23,7 @@
     "fields": {
       "name": "VIDAT_URL",
       "value": "https://vidat2.davidz.cn",
-      "description": "Example: https://vidat2.davidz.cn\nhttp://127.0.0.1:3000/"
+      "description": "Example: https://vidat2.davidz.cn\nhttp://127.0.0.1:3000"
     }
   },
   {
