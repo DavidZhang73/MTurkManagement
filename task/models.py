@@ -78,7 +78,7 @@ class Task(AnnotationModel):
     def manual_url_list(self):
         VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
         return [
-            f'{VIDAT_URL}{manual}' for manual in self.manual_list
+            f'{VIDAT_URL}/{manual}' for manual in self.manual_list
         ]
 
     def video_url(self):
