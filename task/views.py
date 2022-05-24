@@ -17,10 +17,11 @@ def get_random_color():
     return f'#{str(hex(000000 + int(random.random() * 16777216)))[-6:]}'
 
 
-def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH, batch_id):
+def save_task(item_category, item_subCategory, item_id, video, DATASET_PATH, batch_id):
     item_path = os.path.join(DATASET_PATH, item_category, item_subCategory, item_id)
     step_path = os.path.join(item_path, 'step')
     manual_path = os.path.join(item_path, 'manual')
+    video_url = video['url']
     # config
     annotation_path = os.path.join(item_path, 'annotation')
     os.makedirs(annotation_path, exist_ok=True)
@@ -103,20 +104,9 @@ def save_task(item_category, item_subCategory, item_id, video_url, DATASET_PATH,
             [DATASET_PATH, item_category, item_subCategory, item_id, 'annotation',
              f'task-{task_id}-{item_id}-{video_id}.json']),
         manual_list=manual_list,
+        video_title=video.get('title', 'N/A'),
+        video_duration=video.get('duration', 'N/A'),
     ).save()
-
-
-def _new_batch_from_mongodb(description=None):
-    DATASET_PATH = Settings.objects.get(name='DATASET_PATH').value
-    batch = Batch()
-    batch.description = description
-    batch.save()
-    count = 0
-    for item in Item.objects.filter(progressStatus__in=[[True, True, True]]):
-        for video in item.videoList:
-            save_task(item.category, item.subCategory, item.id, video.url, DATASET_PATH, batch.pk)
-            count += 1
-    return count
 
 
 def _new_batch_from_json(description=None):
@@ -130,15 +120,9 @@ def _new_batch_from_json(description=None):
         dataset = json.load(f)
     for item in dataset:
         for video in item['videoList']:
-            save_task(item['category'], item['subCategory'], item['id'], video['url'], DATASET_PATH, batch.pk)
+            save_task(item['category'], item['subCategory'], item['id'], video, DATASET_PATH, batch.pk)
             count += 1
     return count
-
-
-@csrf_exempt
-def new_batch_from_mongodb(request):
-    count = _new_batch_from_mongodb()
-    return HttpResponse(f'{count} tasks added!')
 
 
 @csrf_exempt

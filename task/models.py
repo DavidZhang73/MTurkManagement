@@ -58,6 +58,9 @@ class Batch(models.Model):
 class Task(AnnotationModel):
     batch = models.ForeignKey(to=Batch, on_delete=models.CASCADE, null=True)
 
+    video_title = models.CharField(max_length=1024, blank=True, null=True, editable=False)
+    video_duration = models.IntegerField(null=True, editable=False)
+
     mturk_hit_id = models.CharField(max_length=128, null=True, editable=False)
     mturk_hit_status = models.CharField(max_length=32, null=True, editable=False)
     mturk_hit_title = models.CharField(max_length=128, null=True, editable=False)

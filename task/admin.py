@@ -15,7 +15,7 @@ from import_export.formats.base_formats import CSV
 from simpleui.admin import AjaxAdmin
 
 from .models import Batch, Task, Settings, Assignment
-from .views import _new_batch_from_json, _new_batch_from_mongodb
+from .views import _new_batch_from_json
 
 external_reg = re.compile(r'<ExternalURL>(.+?)</ExternalURL>')
 html_content_reg = re.compile(r'<HTMLContent>([\s\S]+?)</HTMLContent>')
@@ -105,15 +105,6 @@ class BatchAdmin(AjaxAdmin):
             'msg': f'{count} tasks added!'
         })
 
-    @admin.action(description="New Batch From MongoDB")
-    def new_batch_from_mongodb(self, request, queryset):
-        description = request.POST.get('description')
-        count = _new_batch_from_mongodb(description)
-        return JsonResponse(data={
-            'status': 'success',
-            'msg': f'{count} tasks added!'
-        })
-
     layer_desc = {
         'title': 'Please provide a short description for the new batch',
         'confirm_button': 'Confirm',
@@ -130,12 +121,12 @@ class BatchAdmin(AjaxAdmin):
     }
     new_batch_from_json.layer = layer_desc
     new_batch_from_json.type = 'primary'
-    new_batch_from_mongodb.layer = layer_desc
 
 
 class TaskResources(resources.ModelResource):
     url = Field()
     video = Field()
+    step_count = Field()
 
     def dehydrate_url(self, task):
         return task.url()
@@ -143,13 +134,19 @@ class TaskResources(resources.ModelResource):
     def dehydrate_video(self, task):
         return task.video_url()
 
+    def dehydrate_video_title(self, task):
+        return re.sub(r'[^A-Za-z0-9\s]+', '', task.video_title).strip()
+
     def dehydrate_manual_list(self, task):
         return task.manual_url_list()
 
+    def dehydrate_step_count(self, task):
+        return task.step_list_count()
+
     class Meta:
         model = Task
-        fields = ('id', 'url', 'video', 'manual_list')
-        export_order = ('id', 'url', 'video', 'manual_list')
+        fields = ('id', 'url', 'video', 'video_title', 'video_duration', 'manual_list', 'step_count')
+        export_order = ('id', 'url', 'video', 'video_title', 'video_duration', 'manual_list', 'step_count')
 
 
 @admin.register(Task)
@@ -160,6 +157,8 @@ class TaskAdmin(ExportMixin, AjaxAdmin):
         'audit_pass_fail_unset_count',
         'submission_count',
         'step_count',
+        'video_title',
+        'video_duration',
         'batch',
         'mturk_hit_id',
         'mturk_hit_status',
