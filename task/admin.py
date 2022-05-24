@@ -163,9 +163,12 @@ class TaskAdmin(ExportMixin, AjaxAdmin):
         'batch',
         'mturk_hit_id',
         'mturk_hit_status',
-        'mturk_hit_expiration'
+        'mturk_hit_expiration',
+        'mturk_hit_number_of_assignment_pending',
+        'mturk_hit_number_of_assignment_available',
+        'mturk_hit_number_of_assignment_completed'
     )
-    search_fields = ('id', 'batch', 'annotation_pathname')
+    search_fields = ('id', 'mturk_hit_id', 'annotation_pathname')
     list_filter = ('batch', 'mturk_hit_status')
     actions = ('sync',)
     formfield_overrides = {
@@ -235,6 +238,9 @@ class TaskAdmin(ExportMixin, AjaxAdmin):
                     task.mturk_hit_status = hit.get('HITStatus')
                     task.mturk_hit_title = hit.get('Title')
                     task.mturk_hit_expiration = hit.get('Expiration')
+                    task.mturk_hit_number_of_assignment_pending = hit.get('NumberOfAssignmentsPending')
+                    task.mturk_hit_number_of_assignment_available = hit.get('NumberOfAssignmentsAvailable')
+                    task.mturk_hit_number_of_assignment_completed = hit.get('NumberOfAssignmentsCompleted')
                     requester_annotation = hit.get('RequesterAnnotation')
                     batch = task.batch
                     batch.mturk_batch_id = requester_annotation.split(';')[0].split(':')[1]

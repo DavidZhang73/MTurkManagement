@@ -62,6 +62,9 @@ class Task(AnnotationModel):
     mturk_hit_status = models.CharField(max_length=32, null=True, editable=False)
     mturk_hit_title = models.CharField(max_length=128, null=True, editable=False)
     mturk_hit_expiration = models.DateTimeField(null=True, editable=False)
+    mturk_hit_number_of_assignment_pending = models.IntegerField(null=True, editable=False)
+    mturk_hit_number_of_assignment_available = models.IntegerField(null=True, editable=False)
+    mturk_hit_number_of_assignment_completed = models.IntegerField(null=True, editable=False)
 
     def url(self):
         VIDAT_URL = Settings.objects.get(name='VIDAT_URL').value
