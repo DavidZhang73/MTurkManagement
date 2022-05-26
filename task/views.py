@@ -7,7 +7,6 @@ import uuid
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from item.models import Item
 from task.models import Task, Settings, Batch, Assignment
 
 reg = re.compile(r"(\d+)")
@@ -181,9 +180,10 @@ def submit(request, task_id):
             final_annotation_pathname='/'.join([annotation_path, f'final-{_uuid}.json'])
         )
         assignment.save()
+        checksum = str(sum(int(item[0], 16) for item in str(_uuid).split('-')) % 10)
         return JsonResponse({
             "message": "Thanks for your work! Please copy and paste the uuid back to MTurk.",
-            "clipboard": _uuid
+            "clipboard": str(_uuid) + checksum
         })
     except Exception as e:
         return JsonResponse({

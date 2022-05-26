@@ -19,8 +19,7 @@
         .dont-break-out {
             overflow-wrap: break-word;
             word-wrap: break-word;
-            -ms-word-break: break-all;
-            word-break: break-all;
+            -ms-word-break: break-word;
             word-break: break-word;
             -ms-hyphens: auto;
             -moz-hyphens: auto;
@@ -122,13 +121,13 @@
                 <input class="form-control"
                        id="submissionCode"
                        name="submissionCode"
-                       placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
+                       placeholder="Please paste the submission code here"
                        required
                        type="text"
-                       pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
+                       pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}\d$"
                        aria-describedby="help"
                 />
-                <span id="help">Please provide the submission code obtained from Vidat.</span>
+                <div id="help">Please provide the submission code obtained from Vidat.</div>
                 <label for="peopleCount">How many people are involved during assembly?*:</label>
                 <select class="form-control" id="peopleCount" name="peopleCount">
                     <option value="1">1</option>
@@ -156,8 +155,8 @@
                     <option value="both">Both</option>
                 </select>
                 <label for="feedback">Provide general feedback (optional):</label>
-                <input class="form-control" id="feedback" name="feedback" placeholder="e.g. Vidat is awesome!"
-                       type="text"/>
+                <input class="form-control" id="feedback" name="feedback" type="text"
+                       placeholder="If anything went wrong, please provide feedback here."/>
             </div>
         </div>
     </div>
@@ -187,7 +186,9 @@
         const uuidInputElement = $("#submissionCode")
         const uuidHelpElement = $("#help")
         uuidInputElement.on('input', function (event) {
-            if (/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(event.target.value)) {
+            const value = event.target.value
+            if (/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}\d$/.test(value)
+                && (value.split('-').reduce((acc, cur) => acc + parseInt(cur[0], 16), 0) % 10).toString() === value[value.length - 1]) {
                 uuidHelpElement.hide()
             } else {
                 uuidHelpElement.show()

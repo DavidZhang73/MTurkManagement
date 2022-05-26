@@ -352,7 +352,10 @@ class AssignmentAdmin(AjaxAdmin):
                         break
                     submission_code = submission_code_result[0]
                     try:
-                        assignment = Assignment.objects.get(uuid=submission_code, task__mturk_hit_id=hit_id)
+                        if submission_code[-1] != str(
+                                sum(int(item[0], 16) for item in submission_code[0:-1].split('-')) % 100):
+                            raise ValidationError(f'{submission_code} checksum failed.')
+                        assignment = Assignment.objects.get(uuid=submission_code[0:-1], task__mturk_hit_id=hit_id)
                         assignment.mturk_assignment_id = assignment2.get('AssignmentId')
                         assignment.mturk_assignment_status = assignment2.get('AssignmentStatus')
                         assignment.mturk_worker_id = assignment2.get('WorkerId')
