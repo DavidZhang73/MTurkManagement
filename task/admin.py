@@ -390,7 +390,10 @@ class AssignmentAdmin(AjaxAdmin):
                         try:
                             client.reject_assignment(
                                 AssignmentId=assignment2.get('AssignmentId'),
-                                RequesterFeedback=f"Submission code {submission_code} is wrong!"
+                                RequesterFeedback=f"Submission code {submission_code}\
+                                 could not be found in our database, \
+                                 if you believe this is an error, \
+                                 please contact us <jiahao.zhang@anu.edu.au>."
                             )
                         except:
                             continue
