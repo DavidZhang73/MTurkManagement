@@ -59,7 +59,7 @@ autoSectionLabels: true
 
 #### Step 1
 
-![Click the thumbnail to view each step. Click it again to close the popup.](img/step3-1.png)
+![Click the thumbnail to open the step preview.](img/step3-1.png)
 
 #### Step 2
 
@@ -67,7 +67,7 @@ autoSectionLabels: true
 
 #### Step 3
 
-![Click the second button on the corresponding row to set start and end time for this segment.](img/step3-3.png)
+![Click the second button on the corresponding row to set start and end time for this segment. Or the same button on the step preview.](img/step3-3.png)
 
 ![Once the duration is longer than 0, the warning (yellow) color will disappear.](img/step3-4.png)
 
@@ -85,7 +85,7 @@ autoSectionLabels: true
 > - the configuration is not changed
 > - duration of each action is greater than 0
 
-![Your submission id will be notified and copied to your clipboard.](img/step3-7.png)
+![Your submission id will be notified and copied to your clipboard automatically.](img/step3-7.png)
 
 ## Vidat Introduction
 
