@@ -342,7 +342,7 @@ class AssignmentAdmin(AjaxAdmin):
 
     def sync_with_mturk(self, client):
         count = 0
-        for hit_id in set([item[0] for item in Task.objects.all().values_list('mturk_hit_id')]):
+        for hit_id in Task.objects.all().values_list('mturk_hit_id', flat=True).distinct():
             paginator = client.get_paginator('list_assignments_for_hit')
             for page in paginator.paginate(HITId=hit_id):
                 for assignment2 in page.get('Assignments', []):
@@ -353,7 +353,7 @@ class AssignmentAdmin(AjaxAdmin):
                     submission_code = submission_code_result[0]
                     try:
                         if submission_code[-1] != str(
-                                sum(int(item[0], 16) for item in submission_code[0:-1].split('-')) % 100):
+                                sum(int(item[0], 16) for item in submission_code[0:-1].split('-')) % 10):
                             raise ValidationError(f'{submission_code} checksum failed.')
                         assignment = Assignment.objects.get(uuid=submission_code[0:-1], task__mturk_hit_id=hit_id)
                         assignment.mturk_assignment_id = assignment2.get('AssignmentId')
@@ -384,6 +384,10 @@ class AssignmentAdmin(AjaxAdmin):
 
                         if assignment2.get('AssignmentStatus') == 'Submitted':
                             assignment.status = Assignment.STATUS.SUBMITTED
+                        elif assignment2.get('AssignmentStatus') == 'Rejected':
+                            assignment.status = Assignment.STATUS.REJECTED
+                        elif assignment2.get('AssignmentStatus') == 'Approved':
+                            assignment.status = Assignment.STATUS.APPROVED
                         assignment.save()
                         count += 1
                     except (Assignment.DoesNotExist, ValidationError):
