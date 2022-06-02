@@ -13,7 +13,7 @@ reg = re.compile(r"(\d+)")
 
 
 def get_random_color():
-    return f'#{str(hex(000000 + int(random.random() * 16777216)))[-6:]}'
+    return f'{random.randint(0, 0xFFFFFF):06x}'
 
 
 def save_task(item_category, item_subCategory, item_id, video, DATASET_PATH, batch_id):
