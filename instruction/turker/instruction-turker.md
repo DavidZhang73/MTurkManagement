@@ -59,11 +59,11 @@ autoSectionLabels: true
 
 #### Step 1
 
-![Click the thumbnail to open the step preview.](img/step3-1.png)
+![Click the thumbnail to open the step preview. You can first go through all steps by the prev next buttons.](img/step3-1.png)
 
 #### Step 2
 
-![Locate left and right panel to align start and end frame.](img/step3-2.png)
+![Locate left and right panel to align start and end frame of current action. Here you can use up/down/left/right keyboard shortcuts (details are shown in the next section).](img/step3-2.png)
 
 #### Step 3
 
@@ -75,17 +75,19 @@ autoSectionLabels: true
 
 ![Delete the segment if it is not shown in the video.](img/step3-5.png)
 
+![Add a new action and set it to the coreponding step in situations like two or more steps are overlaping with each other.](img/step3-5-1.png)
+
 #### Step 5
 
 ![Open the side menu after finishing annotation, and click submit button](img/step3-6.png)
 
 > Please check the followings before submitting
 >
-> - the video is not changed
-> - the configuration is not changed
+> - the video has not changed
+> - the configuration has not changed
 > - duration of each action is greater than 0
 
-![Your submission id will be notified and copied to your clipboard automatically.](img/step3-7.png)
+![Your submission id will be notified and copied to your clipboard automatically. This is REALLY IMPORTANT as it is the only prove of your work. Please do paste the correct submission id back to the MTurk.](img/step3-7.png)
 
 ## Vidat Introduction
 

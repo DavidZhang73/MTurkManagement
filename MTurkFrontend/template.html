@@ -39,12 +39,28 @@
 
         img, iframe {
             display: block;
-            max-width: 100%;
             margin-bottom: 8px;
+        }
+
+        img {
+            max-width: 70%;
+        }
+
+        iframe {
+            max-width: 100%;
         }
 
         figure {
             margin: 10px 0;
+        }
+
+        h4 {
+            padding-top: 10px;
+            border-top: 2px solid #ccc;
+        }
+
+        figcaption {
+            font-size: 1.2em;
         }
 
         #help {
@@ -132,8 +148,8 @@
                     obtained from Vidat (It will be copied to your clipboard once you have submitted in Vidat as shown
                     below). Assignment with wrong submission code will be <strong>rejected</strong> automatically.
                 </div>
-                <img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-7.png"
-                     alt="tip"/>
+                <img style="max-width: 100%" alt="tip"
+                     src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/instruction/turker/img/step3-7.png"/>
                 <label for="peopleCount">3. How many people are involved during assembly?*:</label>
                 <select class="form-control" id="peopleCount" name="peopleCount">
                     <option value="1">1</option>
@@ -146,8 +162,8 @@
                     <option value="thirdPerson">Third-person</option>
                     <option value="both">Both</option>
                 </select>
-                <img src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/MTurkFrontend/img/view.jpg"
-                     alt="tip">
+                <img style="max-width: 100%" alt="tip"
+                     src="https://raw.githubusercontent.com/DavidZhang73/MTurkManagement/main/MTurkFrontend/img/view.jpg"/>
                 <label for="isFixed">5. Is the camera fixed or not?*:</label>
                 <select class="form-control" id="isFixed" name="isFixed">
                     <option value="fixed">Fixed</option>
@@ -223,9 +239,9 @@
     const manualsElement = $('#manuals')
     const manualList = ${manual_list}
     for (let i = 0; i < manualList.length; i++) {
-        const link = manualList[i]
-        const manualElement = $('<a class="" href="' + link + '" target="_blank">Manual ' + (i + 1) + '</a>')
-        manualsElement.append(manualElement)
+      const link = manualList[i]
+      const manualElement = $('<a class="" href="' + link + '" target="_blank">Manual ' + (i + 1) + '</a>')
+      manualsElement.append(manualElement)
     }
   })
 </script>
