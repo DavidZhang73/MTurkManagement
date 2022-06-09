@@ -200,6 +200,7 @@ def submit(request, task_id):
 def audit(request, submission_uuid):
     assignment = Assignment.objects.get(uuid=submission_uuid)
     assignment.final_annotation = json.loads(request.body)
+    assignment.description = 'Audited.'
     assignment.save()
     return JsonResponse({
         "message": "Thanks for your work!",
