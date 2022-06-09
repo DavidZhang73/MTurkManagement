@@ -524,7 +524,8 @@ class AssignmentAdmin(AjaxAdmin):
                 'type': 'textarea',
                 'key': 'reason',
                 'label': 'Reason',
-                'require': True
+                'require': True,
+                'value': 'The submission does not meet our criteria. Because'
             }
         ]
     }
