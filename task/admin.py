@@ -5,7 +5,7 @@ import requests
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils.html import format_html
 from django_monaco_editor.widgets import AdminMonacoEditorWidget
 from import_export import resources
@@ -303,7 +303,7 @@ class AssignmentAdmin(AjaxAdmin):
     formfield_overrides = {
         models.JSONField: {'widget': AdminMonacoEditorWidget}
     }
-    actions = ('sync', 'approve', 'reject')
+    actions = ('sync', 'approve', 'reject', 'export_approved_worker_list', 'export_rejected_worker_list')
 
     def has_add_permission(self, request):
         return False
@@ -534,6 +534,34 @@ class AssignmentAdmin(AjaxAdmin):
             }
         ]
     }
+
+    @admin.action(description='Export Approved Worker List')
+    def export_approved_worker_list(self, request, queryset):
+        response = HttpResponse(content_type='text/txt')
+        response['Content-Disposition'] = 'attachment; filename="approved_worker_list.txt"'
+        worker_id_set = set()
+        for assignment in queryset:
+            if assignment.status == Assignment.STATUS.APPROVED and assignment.mturk_worker_id:
+                worker_id_set.add(assignment.mturk_worker_id)
+        response.write('\n'.join(worker_id_set))
+        return response
+
+    export_approved_worker_list.icon = 'fas fa-file-export'
+    export_approved_worker_list.type = 'primary'
+
+    @admin.action(description='Export Rejected Worker List')
+    def export_rejected_worker_list(self, request, queryset):
+        response = HttpResponse(content_type='text/txt')
+        response['Content-Disposition'] = 'attachment; filename="rejected_worker_list.txt"'
+        worker_id_set = set()
+        for assignment in queryset:
+            if assignment.status == Assignment.STATUS.REJECTED and assignment.mturk_worker_id:
+                worker_id_set.add(assignment.mturk_worker_id)
+        response.write('\n'.join(worker_id_set))
+        return response
+
+    export_rejected_worker_list.icon = 'fas fa-file-export'
+    export_rejected_worker_list.type = 'primary'
 
 
 @admin.register(Settings)
