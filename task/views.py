@@ -169,6 +169,11 @@ def submit(request, task_id):
                     "message": "The duration of an action should be greater than 0! "
                                "Please delete all actions that did not appear in the video!"
                 })
+            if action["action"] == 0:
+                return JsonResponse({
+                    "type": 'negative',
+                    "message": f"There should not exist any Default action!"
+                })
         annotation_path = '/'.join([task.annotation_pathname.split('/annotation')[0], 'annotation'])
         assignment = Assignment(
             uuid=_uuid,
