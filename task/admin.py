@@ -279,23 +279,24 @@ class AssignmentAdmin(AjaxAdmin):
         'short_uuid',
         'audit_in_vidat',
         'view_final_in_vidat',
+        'batch',
         'status',
         'step_count',
         'annotated_step_count',
         'work_time',
+        'mturk_worker_id',
+        'mturk_worker_feedback',
         'description',
-        'created_datetime',
-        'last_modified_datetime',
         'people_count',
         'person_view',
         'is_fixed',
         'is_indoor',
         'mturk_assignment_status',
-        'mturk_worker_feedback',
         'mturk_worker_accept_time',
         'mturk_worker_submit_time',
         'mturk_assignment_id',
-        'mturk_worker_id',
+        'created_datetime',
+        'last_modified_datetime',
     )
     list_filter = ('task__batch', 'status')
     search_fields = ('id', 'uuid', 'description')
@@ -324,6 +325,10 @@ class AssignmentAdmin(AjaxAdmin):
             '<a href="{}" target="_blank">Final</a>',
             instance.url(instance.final_annotation_pathname),
         )
+
+    @admin.display(description='Batch')
+    def batch(self, instance):
+        return instance.task.batch
 
     @admin.display(description='#Step')
     def step_count(self, instance):
