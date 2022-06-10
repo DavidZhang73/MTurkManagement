@@ -1,3 +1,4 @@
+import json
 import re
 
 import boto3
@@ -303,7 +304,11 @@ class AssignmentAdmin(AjaxAdmin):
     formfield_overrides = {
         models.JSONField: {'widget': AdminMonacoEditorWidget}
     }
-    actions = ('sync', 'approve', 'reject', 'export_approved_worker_list', 'export_rejected_worker_list')
+    actions = (
+        'sync', 'approve', 'reject',
+        'export_approved_worker_list', 'export_rejected_worker_list',
+        'export_approved_annotation_list', 'export_final_annotation_list'
+    )
 
     def has_add_permission(self, request):
         return False
@@ -535,7 +540,7 @@ class AssignmentAdmin(AjaxAdmin):
         ]
     }
 
-    @admin.action(description='Export Approved Worker List')
+    @admin.action(description='Export Approved Workers')
     def export_approved_worker_list(self, request, queryset):
         response = HttpResponse(content_type='text/txt')
         response['Content-Disposition'] = 'attachment; filename="approved_worker_list.txt"'
@@ -547,9 +552,8 @@ class AssignmentAdmin(AjaxAdmin):
         return response
 
     export_approved_worker_list.icon = 'fas fa-file-export'
-    export_approved_worker_list.type = 'primary'
 
-    @admin.action(description='Export Rejected Worker List')
+    @admin.action(description='Export Rejected Workers')
     def export_rejected_worker_list(self, request, queryset):
         response = HttpResponse(content_type='text/txt')
         response['Content-Disposition'] = 'attachment; filename="rejected_worker_list.txt"'
@@ -561,7 +565,56 @@ class AssignmentAdmin(AjaxAdmin):
         return response
 
     export_rejected_worker_list.icon = 'fas fa-file-export'
-    export_rejected_worker_list.type = 'primary'
+
+    @admin.action(description='Export Approved Annotations')
+    def export_approved_annotation_list(self, request, queryset):
+        response = HttpResponse(content_type='text/json')
+        response['Content-Disposition'] = 'attachment; filename="approved_annotations.json"'
+        annotation_map = {}
+        for assignment in queryset:
+            if assignment.status == Assignment.STATUS.APPROVED:
+                video_src = assignment.annotation['annotation']['video']['src']
+                video_name = video_src.split('/')[-1]
+                video_id = video_name.split('.')[0]
+                annotation_map[video_id] = dict(
+                    batch=assignment.task.batch.id,
+                    video_src=video_src,
+                    annotation=assignment.annotation['annotation']['actionAnnotationList'],
+                    action_label_list=assignment.annotation['config']['actionLabelData'],
+                    people_count=assignment.people_count,
+                    person_view=assignment.person_view,
+                    is_fixed=assignment.is_fixed,
+                    is_indoor=assignment.is_indoor
+                )
+        json.dump(annotation_map, response)
+        return response
+
+    export_approved_annotation_list.icon = 'fas fa-file-export'
+
+    @admin.action(description='Export Final Annotations')
+    def export_final_annotation_list(self, request, queryset):
+        response = HttpResponse(content_type='text/json')
+        response['Content-Disposition'] = 'attachment; filename="final_annotations.json"'
+        annotation_map = {}
+        for assignment in queryset:
+            if assignment.status == Assignment.STATUS.APPROVED and assignment.final_annotation:
+                video_src = assignment.final_annotation['annotation']['video']['src']
+                video_name = video_src.split('/')[-1]
+                video_id = video_name.split('.')[0]
+                annotation_map[video_id] = dict(
+                    batch=assignment.task.batch.id,
+                    video_src=video_src,
+                    annotation=assignment.final_annotation['annotation']['actionAnnotationList'],
+                    action_label_list=assignment.final_annotation['config']['actionLabelData'],
+                    people_count=assignment.people_count,
+                    person_view=assignment.person_view,
+                    is_fixed=assignment.is_fixed,
+                    is_indoor=assignment.is_indoor
+                )
+        json.dump(annotation_map, response)
+        return response
+
+    export_final_annotation_list.icon = 'fas fa-file-export'
 
 
 @admin.register(Settings)
