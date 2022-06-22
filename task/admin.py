@@ -575,16 +575,21 @@ class AssignmentAdmin(AjaxAdmin):
                 video_src = assignment.annotation['annotation']['video']['src']
                 video_name = video_src.split('/')[-1]
                 video_id = video_name.split('.')[0]
-                annotation_map[video_id] = dict(
+                item = dict(
                     batch=assignment.task.batch.id,
                     video_src=video_src,
-                    annotation=assignment.annotation['annotation']['actionAnnotationList'],
-                    action_label_list=assignment.annotation['config']['actionLabelData'],
+                    annotation=assignment.final_annotation['annotation']['actionAnnotationList'],
+                    action_label_list=assignment.final_annotation['config']['actionLabelData'],
                     people_count=assignment.people_count,
                     person_view=assignment.person_view,
                     is_fixed=assignment.is_fixed,
-                    is_indoor=assignment.is_indoor
+                    is_indoor=assignment.is_indoor,
+                    description=assignment.description
                 )
+                if video_id in annotation_map:
+                    annotation_map[video_id].append(item)
+                else:
+                    annotation_map[video_id] = [item]
         json.dump(annotation_map, response)
         return response
 
@@ -600,7 +605,7 @@ class AssignmentAdmin(AjaxAdmin):
                 video_src = assignment.final_annotation['annotation']['video']['src']
                 video_name = video_src.split('/')[-1]
                 video_id = video_name.split('.')[0]
-                annotation_map[video_id] = dict(
+                item = dict(
                     batch=assignment.task.batch.id,
                     video_src=video_src,
                     annotation=assignment.final_annotation['annotation']['actionAnnotationList'],
@@ -608,8 +613,13 @@ class AssignmentAdmin(AjaxAdmin):
                     people_count=assignment.people_count,
                     person_view=assignment.person_view,
                     is_fixed=assignment.is_fixed,
-                    is_indoor=assignment.is_indoor
+                    is_indoor=assignment.is_indoor,
+                    description=assignment.description
                 )
+                if video_id in annotation_map:
+                    annotation_map[video_id].append(item)
+                else:
+                    annotation_map[video_id] = [item]
         json.dump(annotation_map, response)
         return response
 
