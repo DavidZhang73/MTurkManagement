@@ -544,7 +544,7 @@ class AssignmentAdmin(AjaxAdmin):
         response = HttpResponse(content_type='text/txt')
         response['Content-Disposition'] = 'attachment; filename="approved_worker_list.txt"'
         worker_id_set = set()
-        for assignment in queryset:
+        for assignment in Assignment.objects.all():
             if assignment.status == Assignment.STATUS.APPROVED and assignment.mturk_worker_id:
                 worker_id_set.add(assignment.mturk_worker_id)
         response.write('\n'.join(worker_id_set))
@@ -557,7 +557,7 @@ class AssignmentAdmin(AjaxAdmin):
         response = HttpResponse(content_type='text/txt')
         response['Content-Disposition'] = 'attachment; filename="rejected_worker_list.txt"'
         worker_id_set = set()
-        for assignment in queryset:
+        for assignment in Assignment.objects.all():
             if assignment.status == Assignment.STATUS.REJECTED and assignment.mturk_worker_id:
                 worker_id_set.add(assignment.mturk_worker_id)
         response.write('\n'.join(worker_id_set))
@@ -570,7 +570,7 @@ class AssignmentAdmin(AjaxAdmin):
         response = HttpResponse(content_type='text/json')
         response['Content-Disposition'] = 'attachment; filename="approved_annotations.json"'
         annotation_map = {}
-        for assignment in queryset:
+        for assignment in Assignment.objects.all():
             if assignment.status == Assignment.STATUS.APPROVED:
                 video_src = assignment.annotation['annotation']['video']['src']
                 video_name = video_src.split('/')[-1]
@@ -600,7 +600,7 @@ class AssignmentAdmin(AjaxAdmin):
         response = HttpResponse(content_type='text/json')
         response['Content-Disposition'] = 'attachment; filename="final_annotations.json"'
         annotation_map = {}
-        for assignment in queryset:
+        for assignment in Assignment.objects.all():
             if assignment.status == Assignment.STATUS.APPROVED and assignment.final_annotation:
                 video_src = assignment.final_annotation['annotation']['video']['src']
                 video_name = video_src.split('/')[-1]
