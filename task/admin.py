@@ -1,5 +1,6 @@
 import json
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 import boto3
 import requests
@@ -350,77 +351,86 @@ class AssignmentAdmin(AjaxAdmin):
         else:
             return '0'
 
-    def sync_with_mturk(self, client):
+    @staticmethod
+    def _sync_with_mturk(client, hit_id):
         count = 0
-        for hit_id in Task.objects.all().values_list('mturk_hit_id', flat=True).distinct():
-            paginator = client.get_paginator('list_assignments_for_hit')
-            for page in paginator.paginate(HITId=hit_id):
-                for assignment2 in page.get('Assignments', []):
-                    answer = assignment2.get('Answer')
-                    submission_code_result = answer_submission_code_reg.findall(answer)
-                    if not submission_code_result:
-                        break
-                    submission_code = submission_code_result[0]
+        paginator = client.get_paginator('list_assignments_for_hit')
+        for page in paginator.paginate(HITId=hit_id):
+            for assignment2 in page.get('Assignments', []):
+                answer = assignment2.get('Answer')
+                submission_code_result = answer_submission_code_reg.findall(answer)
+                if not submission_code_result:
+                    break
+                submission_code = submission_code_result[0]
+                try:
+                    if submission_code[-1] != str(
+                            sum(int(item[0], 16) for item in submission_code[0:-1].split('-')) % 10):
+                        raise ValidationError(f'{submission_code} checksum failed.')
+                    assignment = Assignment.objects.get(uuid=submission_code[0:-1], task__mturk_hit_id=hit_id)
+                    assignment.mturk_assignment_id = assignment2.get('AssignmentId')
+                    assignment.mturk_assignment_status = assignment2.get('AssignmentStatus')
+                    assignment.mturk_worker_id = assignment2.get('WorkerId')
+                    assignment.mturk_worker_accept_time = assignment2.get('AcceptTime')
+                    assignment.mturk_worker_submit_time = assignment2.get('SubmitTime')
+
+                    people_count_result = answer_people_count_reg.findall(answer)
+                    if people_count_result:
+                        assignment.people_count = people_count_result[0]
+
+                    person_view_result = answer_person_view_reg.findall(answer)
+                    if person_view_result:
+                        assignment.person_view = person_view_result[0]
+
+                    is_fixed_result = answer_is_fixed_reg.findall(answer)
+                    if is_fixed_result:
+                        assignment.is_fixed = is_fixed_result[0]
+
+                    is_indoor_result = answer_is_indoor_reg.findall(answer)
+                    if is_indoor_result:
+                        assignment.is_indoor = is_indoor_result[0]
+
+                    feedback_result = answer_feedback_reg.findall(answer)
+                    if feedback_result:
+                        assignment.mturk_worker_feedback = feedback_result[0]
+
+                    if assignment2.get('AssignmentStatus') == 'Submitted':
+                        assignment.status = Assignment.STATUS.SUBMITTED
+                    elif assignment2.get('AssignmentStatus') == 'Rejected':
+                        assignment.status = Assignment.STATUS.REJECTED
+                    elif assignment2.get('AssignmentStatus') == 'Approved':
+                        assignment.status = Assignment.STATUS.APPROVED
+                    assignment.save()
+                    count += 1
+                except (Assignment.DoesNotExist, ValidationError):
                     try:
-                        if submission_code[-1] != str(
-                                sum(int(item[0], 16) for item in submission_code[0:-1].split('-')) % 10):
-                            raise ValidationError(f'{submission_code} checksum failed.')
-                        assignment = Assignment.objects.get(uuid=submission_code[0:-1], task__mturk_hit_id=hit_id)
-                        assignment.mturk_assignment_id = assignment2.get('AssignmentId')
-                        assignment.mturk_assignment_status = assignment2.get('AssignmentStatus')
-                        assignment.mturk_worker_id = assignment2.get('WorkerId')
-                        assignment.mturk_worker_accept_time = assignment2.get('AcceptTime')
-                        assignment.mturk_worker_submit_time = assignment2.get('SubmitTime')
-
-                        people_count_result = answer_people_count_reg.findall(answer)
-                        if people_count_result:
-                            assignment.people_count = people_count_result[0]
-
-                        person_view_result = answer_person_view_reg.findall(answer)
-                        if person_view_result:
-                            assignment.person_view = person_view_result[0]
-
-                        is_fixed_result = answer_is_fixed_reg.findall(answer)
-                        if is_fixed_result:
-                            assignment.is_fixed = is_fixed_result[0]
-
-                        is_indoor_result = answer_is_indoor_reg.findall(answer)
-                        if is_indoor_result:
-                            assignment.is_indoor = is_indoor_result[0]
-
-                        feedback_result = answer_feedback_reg.findall(answer)
-                        if feedback_result:
-                            assignment.mturk_worker_feedback = feedback_result[0]
-
-                        if assignment2.get('AssignmentStatus') == 'Submitted':
-                            assignment.status = Assignment.STATUS.SUBMITTED
-                        elif assignment2.get('AssignmentStatus') == 'Rejected':
-                            assignment.status = Assignment.STATUS.REJECTED
-                        elif assignment2.get('AssignmentStatus') == 'Approved':
-                            assignment.status = Assignment.STATUS.APPROVED
-                        assignment.save()
-                        count += 1
-                    except (Assignment.DoesNotExist, ValidationError):
-                        try:
-                            client.reject_assignment(
-                                AssignmentId=assignment2.get('AssignmentId'),
-                                RequesterFeedback=f"Submission code {submission_code}\
-                                 could not be found in our database, \
-                                 if you believe this is an error, \
-                                 please contact us <jiahao.zhang@anu.edu.au>."
-                            )
-                        except:
-                            continue
-                        raise Exception(
-                            f'Assignment {submission_code} could not be found! So we reject it automatically!'
+                        client.reject_assignment(
+                            AssignmentId=assignment2.get('AssignmentId'),
+                            RequesterFeedback=f"Submission code {submission_code}\
+                                         could not be found in our database, \
+                                         if you believe this is an error, \
+                                         please contact us <jiahao.zhang@anu.edu.au>."
                         )
+                    except:
+                        continue
+                    raise Exception(
+                        f'Assignment {submission_code} could not be found! So we reject it automatically!'
+                    )
+        return count
+
+    @staticmethod
+    def sync_with_mturk(client):
+        count = 0
+        with ThreadPoolExecutor() as executor:
+            hit_id_list = Task.objects.all().values_list('mturk_hit_id', flat=True).distinct()
+            for result in executor.map(AssignmentAdmin._sync_with_mturk, [client] * len(hit_id_list), hit_id_list):
+                count += result
         return count
 
     @admin.display(description='Sync With MTurk')
     def sync(self, request, queryset):
         try:
             client = get_boto3_client()
-            count = self.sync_with_mturk(client)
+            count = AssignmentAdmin.sync_with_mturk(client)
             return JsonResponse(data={
                 'status': 'success',
                 'msg': f'{count} assignments are synchronized.'
