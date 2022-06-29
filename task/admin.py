@@ -420,7 +420,7 @@ class AssignmentAdmin(AjaxAdmin):
     @staticmethod
     def sync_with_mturk(client):
         count = 0
-        with ThreadPoolExecutor() as executor:
+        with ThreadPoolExecutor(max_workers=10) as executor:
             hit_id_list = Task.objects.all().values_list('mturk_hit_id', flat=True).distinct()
             for result in executor.map(AssignmentAdmin._sync_with_mturk, [client] * len(hit_id_list), hit_id_list):
                 count += result
