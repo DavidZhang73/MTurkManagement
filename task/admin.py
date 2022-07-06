@@ -624,6 +624,7 @@ class AssignmentAdmin(AjaxAdmin):
                     person_view=assignment.person_view,
                     is_fixed=assignment.is_fixed,
                     is_indoor=assignment.is_indoor,
+                    mturk_worker_feedback=assignment.mturk_worker_feedback,
                     description=assignment.description
                 )
                 if video_id in annotation_map:
