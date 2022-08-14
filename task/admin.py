@@ -282,6 +282,7 @@ class AssignmentAdmin(AjaxAdmin):
         'audit_in_vidat',
         'view_final_in_vidat',
         'batch',
+        'task',
         'status',
         'step_count',
         'annotated_step_count',
@@ -301,7 +302,7 @@ class AssignmentAdmin(AjaxAdmin):
         'last_modified_datetime',
     )
     list_filter = ('task__batch', 'status')
-    search_fields = ('id', 'uuid', 'description', 'mturk_worker_id', 'mturk_assignment_id')
+    search_fields = ('id', 'uuid', 'task__id', 'description', 'mturk_worker_id', 'mturk_assignment_id')
     formfield_overrides = {
         models.JSONField: {'widget': AdminMonacoEditorWidget}
     }
